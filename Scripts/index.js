@@ -1,6 +1,6 @@
 ﻿(function () {
 	"use strict";
-	var worker, intervalId, timeElement;
+	var worker, timeElement;
 
 	worker = new Worker("Scripts/task.js");
 
@@ -10,7 +10,5 @@
 		timeElement.textContent = oEvent.data.toTimeString();
 	}, false);
 
-	intervalId = setInterval(function () {
-		worker.postMessage("It doesn't really matter what this message is.");
-	}, 1000);
+	worker.postMessage("It doesn't really matter what this message is.");
 }());

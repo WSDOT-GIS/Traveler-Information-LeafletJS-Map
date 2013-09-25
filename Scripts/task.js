@@ -1,8 +1,12 @@
 ﻿(function () {
 	"use strict";
 
+
 	onmessage = function (event) {
-		var message = new Date();
-		self.postMessage(message);
+		var intervalId;
+
+		intervalId = setInterval(function () {
+			postMessage(new Date());
+		}, 1000);
 	};
 }());
