@@ -1,4 +1,8 @@
-﻿onmessage = function (event) {
-	var message = { message: "This is the message" };
-	self.postMessage(message);
-};
+﻿(function () {
+	"use strict";
+
+	onmessage = function (event) {
+		var message = new Date();
+		self.postMessage(message);
+	};
+}());

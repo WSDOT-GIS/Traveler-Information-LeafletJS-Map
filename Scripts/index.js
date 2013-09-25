@@ -1,11 +1,16 @@
-﻿var worker;
+﻿(function () {
+	"use strict";
+	var worker, intervalId, timeElement;
 
-worker = new Worker("Scripts/task.js");
+	worker = new Worker("Scripts/task.js");
 
-worker.addEventListener("message", function (oEvent) {
-	if (console) {
-		console.log(this, arguments);
-	}
-}, false);
+	timeElement = document.getElementById("time");
 
-worker.postMessage("It doesn't really matter what this message is.");
+	worker.addEventListener("message", function (oEvent) {
+		timeElement.textContent = oEvent.data.toTimeString();
+	}, false);
+
+	intervalId = setInterval(function () {
+		worker.postMessage("It doesn't really matter what this message is.");
+	}, 1000);
+}());
