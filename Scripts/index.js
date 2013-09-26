@@ -7,7 +7,7 @@
 	timeElement = document.getElementById("time");
 
 	worker.addEventListener("message", function (oEvent) {
-		timeElement.textContent = oEvent.data.toTimeString();
+		console.log(oEvent.data);
 	}, false);
 
 	worker.postMessage("It doesn't really matter what this message is.");
