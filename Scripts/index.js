@@ -1,14 +1,24 @@
-﻿(function () {
+﻿/*global L*/
+(function (L) {
 	"use strict";
-	var worker, timeElement;
+	var worker, map;
 
-	worker = new Worker("Scripts/task.js");
+	map = L.map('map').setView([47.41322033015946, -120.80566406246835], 7);
 
-	timeElement = document.getElementById("time");
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+		maxZoom: 18
+	}).addTo(map);
 
-	worker.addEventListener("message", function (oEvent) {
-		console.log(oEvent.data);
-	}, false);
+	function setupWebWorker() {
+		worker = new Worker("Scripts/task.js");
 
-	worker.postMessage("It doesn't really matter what this message is.");
-}());
+		worker.addEventListener("message", function (oEvent) {
+			console.log(oEvent.data);
+		}, false);
+
+		worker.postMessage("It doesn't really matter what this message is.");
+	}
+
+	// TODO start up web worker when map has loaded.
+}(L));
