@@ -21,4 +21,5 @@
 	}
 
 	// TODO start up web worker when map has loaded.
+	setupWebWorker();
 }(L));

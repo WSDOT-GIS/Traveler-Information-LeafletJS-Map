@@ -27,13 +27,6 @@ namespace WebWorkerTest
 					{
 						data = reader.ReadToEnd();
 					}
-					
-					////int currentByte = stream.ReadByte();
-					////while (currentByte != -1)
-					////{
-					////	context.Response.OutputStream.WriteByte(Convert.ToByte(currentByte));
-					////	currentByte = stream.ReadByte();
-					////}
 				}
 			}
 			context.Response.ContentType = "application/json";
