@@ -1,7 +1,7 @@
 ﻿/*global L*/
 (function (L) {
 	"use strict";
-	var worker, map;
+	var worker, map, layer;
 
 	map = L.map('map').setView([47.41322033015946, -120.80566406246835], 7);
 
@@ -14,7 +14,13 @@
 		worker = new Worker("Scripts/task.js");
 
 		worker.addEventListener("message", function (oEvent) {
-			console.log(oEvent.data);
+			var geoJson = oEvent.data;
+			if (layer) {
+				map.removeLayer(layer);
+			}
+			if (geoJson) {
+				layer = L.geoJson(geoJson).addTo(map);
+			}
 		}, false);
 
 		worker.postMessage("It doesn't really matter what this message is.");

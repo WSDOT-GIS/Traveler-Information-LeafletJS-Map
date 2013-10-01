@@ -59,6 +59,11 @@
 		}
 	}
 
+	function FeatureCollection(features) {
+		this.type = "FeatureCollection";
+		this.features = features;
+	}
+
 	function sendRequest() {
 		var webRequest = new XMLHttpRequest();
 		webRequest.onload = function () {
@@ -71,6 +76,8 @@
 				}
 				return output;
 			}) : this.response;
+
+			data = new FeatureCollection(data);
 			postMessage(data);
 		};
 		webRequest.open("GET", "../GetAlerts.ashx", true);
