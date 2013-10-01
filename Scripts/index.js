@@ -1,14 +1,31 @@
 ﻿/*global Worker, L*/
 (function (L) {
 	"use strict";
-	var worker, map, layer;
+	var worker, map, osmLayer, mapQuestOsmLayer, layer;
 
-	map = L.map('map').setView([47.41322033015946, -120.80566406246835], 7).locate({setView: true, maxZoom: 16});
-
-	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
 		maxZoom: 18
+	});
+
+	mapQuestOsmLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
+		subdomains: ["otile1", "otile2", "otile3", "otile4"],
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' + 
+			'<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>',
+		maxZoom: 18
+	});
+
+	map = L.map('map', {
+		center: [47.41322033015946, -120.80566406246835],
+		zoom: 7,
+		layers: [osmLayer]
+	}).locate({ setView: true, maxZoom: 16 });
+
+	L.control.layers({
+		OpenStreetMap: osmLayer, 
+		"MapQuest OSM": mapQuestOsmLayer
 	}).addTo(map);
+
 
 	function setupWebWorker() {
 		worker = new Worker("Scripts/task.js");
