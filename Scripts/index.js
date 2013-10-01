@@ -1,7 +1,7 @@
 ﻿/*global Worker, L*/
 (function (L) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, layer;
+	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, layer;
 
 	osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -15,6 +15,13 @@
 		maxZoom: 18
 	});
 
+	mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
+		subdomains: ["otile1", "otile2", "otile3", "otile4"],
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
+			'<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>',
+		maxZoom: 18
+	});
+
 	map = L.map('map', {
 		center: [47.41322033015946, -120.80566406246835],
 		zoom: 7,
@@ -23,7 +30,8 @@
 
 	L.control.layers({
 		OpenStreetMap: osmLayer, 
-		"MapQuest OSM": mapQuestOsmLayer
+		"MapQuest OSM": mapQuestOsmLayer,
+		"MapQest Open Aerial": mapQuestOALayer
 	}).addTo(map);
 
 
