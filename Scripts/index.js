@@ -3,7 +3,7 @@
 	"use strict";
 	var worker, map, layer;
 
-	map = L.map('map').setView([47.41322033015946, -120.80566406246835], 7);
+	map = L.map('map').setView([47.41322033015946, -120.80566406246835], 7).locate({setView: true, maxZoom: 16});
 
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -19,7 +19,11 @@
 				map.removeLayer(layer);
 			}
 			if (geoJson) {
-				layer = L.geoJson(geoJson).addTo(map);
+				layer = L.geoJson(geoJson, {
+					onEachFeature: function (feature, layer) {
+						layer.bindPopup(feature.properties.HeadlineDescription);
+					}
+				}).addTo(map);
 			}
 		}, false);
 
