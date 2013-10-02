@@ -4,6 +4,9 @@
 
 	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//, urlRe = /(?:(https?:\/\/)?www.wsdot.wa.gov)\S+/;
 
+	/** Formats a date object into a string.
+	 * @returns {String} Returns date formatted as month-date-year hour:minute.
+	 */
 	function formatDate(/**{Date}*/ date) {
 		return [
 					[date.getMonth() + 1, date.getDate(), date.getFullYear()].join("-"),
@@ -11,6 +14,9 @@
 		].join(" ");
 	}
 
+	/** Converts a .NET formatted date string into a Date if possible. 
+	 * If not possible or if input is not a string, the input is returned.
+	 */
 	function toDate(value) {
 		var match, output = value;
 		if (typeof value === "string") {
@@ -27,11 +33,17 @@
 		return output;
 	}
 
-	function toPosition(roadwayLocation) {
+	/** Converts a roadway location into a GeoJSON position. 
+	 * @returns {Array} An array: [x, y, null, milepost]
+	 */
+	function toPosition(/**{Object}*/roadwayLocation) {
 		return [roadwayLocation.Longitude, roadwayLocation.Latitude, null, roadwayLocation.Milepost];
 	}
 
-	function createGeometry(alert) {
+	/** Creates a GeoJSON geometry object from an alert.
+	 * @returns {Object}
+	 */
+	function createGeometry(/**{Object}*/ alert) {
 		var output;
 		if (alert.StartRoadwayLocation && alert.EndRoadwayLocation) {
 			output = {
@@ -55,7 +67,10 @@
 		return output;
 	}
 
-	function Feature(alert) {
+	/** Creates a GeoJSON feature
+	 * @constructor
+	 */
+	function Feature(/**{Object}*/ alert) {
 		var match, rl, propName, rlPropName;
 		this.type = "Feature";
 		this.properties = {};
@@ -82,11 +97,17 @@
 		}
 	}
 
+	/** Creates a GeoJSON feature collection.
+	 * @constructor
+	 */
 	function FeatureCollection(features) {
 		this.type = "FeatureCollection";
 		this.features = features;
 	}
 
+	/** Sends a request for alerts from the WSDOT Traveler Information API.
+	 * @returns {XMLHttpRequest}
+	 */
 	function sendRequest() {
 		var webRequest = new XMLHttpRequest();
 		webRequest.onload = function () {
@@ -105,8 +126,10 @@
 		};
 		webRequest.open("GET", "../GetAlerts.ashx", true);
 		webRequest.send();
+		return webRequest;
 	}
 
+	// Setup the task's "onmessage" event.
 	onmessage = function (event) {
 		var intervalId;
 		sendRequest();
