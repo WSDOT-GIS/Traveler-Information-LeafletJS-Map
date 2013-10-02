@@ -1,8 +1,31 @@
-﻿/*global onmessage, postMessage*/
+﻿/*global onmessage, postMessage, setInterval*/
 (function () {
 	"use strict";
 
-	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/;
+	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//, urlRe = /(?:(https?:\/\/)?www.wsdot.wa.gov)\S+/;
+
+	function formatDate(/**{Date}*/ date) {
+		return [
+					[date.getMonth() + 1, date.getDate(), date.getFullYear()].join("-"),
+					[date.getHours(), date.getMinutes()].join(":")
+		].join(" ");
+	}
+
+	function toDate(value) {
+		var match, output = value;
+		if (typeof value === "string") {
+			match = value.match(dateRe);
+			if (match) {
+				if (match.length >= 3) {
+					output = new Date(Number(match[1]) + Number(match[2]));
+				} else {
+					output = new Date(Number(match[1]));
+				}
+				output = formatDate(output);
+			}
+		}
+		return output;
+	}
 
 	function toPosition(roadwayLocation) {
 		return [roadwayLocation.Longitude, roadwayLocation.Latitude, null, roadwayLocation.Milepost];
@@ -53,7 +76,7 @@
 
 					}
 				} else {
-					this.properties[propName] = alert[propName];
+					this.properties[propName] = toDate(alert[propName]);
 				}
 			}
 		}

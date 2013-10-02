@@ -69,6 +69,42 @@
 		"OpenCycleMap Outdoors": ocmOutdoorsLayer
 	}).addTo(map);
 
+	function createAlertContent(feature) {
+		var name, frag, table, row, cell, p;
+		frag = document.createElement("div");
+		table = document.createElement("table");
+		for (name in feature.properties) {
+			if (feature.properties.hasOwnProperty(name) && !/Description/i.test(name)) {
+				if (feature.properties[name]) {
+					row = document.createElement("tr");
+					cell = document.createElement("th");
+					cell.textContent = name;
+					row.appendChild(cell);
+					cell = document.createElement("td");
+					cell.textContent = feature.properties[name];
+					row.appendChild(cell);
+					table.appendChild(row);
+				}
+			}
+		}
+
+		p = document.createElement("p");
+		p.classList.add("headline-description");
+		p.textContent = feature.properties.HeadlineDescription;
+		frag.appendChild(p);
+
+		if (feature.properties.ExtendedDescription) {
+			p = document.createElement("p");
+			p.classList.add("headline-description");
+			p.textContent = feature.properties.ExtendedDescription;
+			frag.appendChild(p);
+		}
+		frag.appendChild(table);
+
+		return frag;
+		
+	}
+
 
 	function setupWebWorker() {
 		worker = new Worker("Scripts/task.js");
@@ -98,7 +134,7 @@
 						});
 					},
 					onEachFeature: function (feature, layer) {
-						layer.bindPopup(feature.properties.HeadlineDescription);
+						layer.bindPopup(createAlertContent(feature));
 					}
 				}).addTo(map);
 			}
