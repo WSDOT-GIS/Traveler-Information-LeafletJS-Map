@@ -2,7 +2,7 @@
 (function () {
 	"use strict";
 
-	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//, urlRe = /(?:(https?:\/\/)?www.wsdot.wa.gov)\S+/;
+	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//;
 
 	/** Formats a date object into a string.
 	 * @returns {String} Returns date formatted as month-date-year hour:minute.

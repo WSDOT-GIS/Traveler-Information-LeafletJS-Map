@@ -1,4 +1,5 @@
 ﻿/*global Worker, L*/
+/*jslint browser:true*/
 (function (L) {
 	"use strict";
 	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer;
@@ -83,6 +84,32 @@
 		return output;
 	}
 
+	/** Detects URLs in text and surrounds them with <a> tags.
+	 * @returns {string}
+	 */
+	function replaceUrlsWithLinks(/**{string}*/ text) {
+		var urlRe, output;
+		if (typeof text === "string") {
+			urlRe = /(?:(https?:\/\/)?www.wsdot.wa.gov)\S+/ig;
+			output = text.replace(urlRe, function (match, p1 /*, offset, string*/) {
+				var a;
+				if (p1) {
+					a = match;
+				} else {
+					a = "http://" + match;
+				}
+				a = ["<a href='", a, "' target='wsdotproject'>link</a>"].join("");
+				return a;
+			});
+		} else {
+			output = text;
+		}
+		return output;
+	}
+
+	/** Formats the alert content into a div element for a popup.
+	 * @returns {HTMLDivElement}
+	 */
 	function createAlertContent(feature) {
 		var name, frag, table, row, cell, p;
 		frag = document.createElement("div");
@@ -110,7 +137,7 @@
 		if (feature.properties.ExtendedDescription) {
 			p = document.createElement("p");
 			p.classList.add("headline-description");
-			p.textContent = feature.properties.ExtendedDescription;
+			p.innerHTML = replaceUrlsWithLinks(feature.properties.ExtendedDescription);
 			frag.appendChild(p);
 		}
 		frag.appendChild(table);
