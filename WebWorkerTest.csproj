@@ -73,6 +73,10 @@
     <Content Include="Scripts\task.min.js">
       <DependentUpon>task.js</DependentUpon>
     </Content>
+    <Content Include="Styles\index.css" />
+    <Content Include="Styles\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="README.md" />
     <Content Include="Scripts\task.min.js.map">
