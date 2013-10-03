@@ -45,6 +45,9 @@
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\index.js" />
+    <Content Include="Scripts\index.min.js">
+      <DependentUpon>index.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\task.js" />
   </ItemGroup>
   <ItemGroup>
@@ -67,8 +70,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\task.min.js">
+      <DependentUpon>task.js</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="README.md" />
+    <Content Include="Scripts\task.min.js.map">
+      <DependentUpon>task.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\index.min.js.map">
+      <DependentUpon>index.js</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

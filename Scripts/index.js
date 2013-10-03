@@ -148,7 +148,7 @@
 
 
 	function setupWebWorker() {
-		worker = new Worker("Scripts/task.js");
+		worker = new Worker("Scripts/task.min.js");
 
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
