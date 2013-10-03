@@ -69,6 +69,20 @@
 		"OpenCycleMap Outdoors": ocmOutdoorsLayer
 	}).addTo(map);
 
+	/** Splits Pascal case names into words separated by spaces.
+	 * @returns {string}
+	 */
+	function formatName(/**{string}*/ key) {
+		var re = /[A-Z][a-z]+/g, match, output;
+
+		if (key) {
+			match = key.match(re);
+			output = match.join(" ");
+		}
+
+		return output;
+	}
+
 	function createAlertContent(feature) {
 		var name, frag, table, row, cell, p;
 		frag = document.createElement("div");
@@ -78,7 +92,7 @@
 				if (feature.properties[name]) {
 					row = document.createElement("tr");
 					cell = document.createElement("th");
-					cell.textContent = name;
+					cell.textContent = formatName(name);
 					row.appendChild(cell);
 					cell = document.createElement("td");
 					cell.textContent = feature.properties[name];
