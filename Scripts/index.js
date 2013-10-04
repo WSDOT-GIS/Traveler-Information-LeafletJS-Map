@@ -346,22 +346,6 @@
 			if (geoJson) {
 				layer = L.geoJson(geoJson, {
 					pointToLayer: function (feature, latLng) {
-						////var priority = feature.properties.Priority, color;
-
-						////color = priority === "Highest" ? "#FF0000"
-						////	: priority === "High" ? "#550000"
-						////	: priority === "Medium" ? "#FFFF00"
-						////	: priority === "Low" ? "#00FF00"
-						////	: priority === "Lowest" ? "#00CC00"
-						////	: "#FFFFFF";
-						////return L.circleMarker(latLng, {
-						////	radius: 8,
-						////	fillColor: color,
-						////	weight: 1,
-						////	opacity: 1,
-						////	fillOpacity: 0.8
-						////});
-						
 						var icon;
 						icon = signIcons.GetIcon(feature);
 						return L.marker(latLng, { icon: icon });
