@@ -1,8 +1,8 @@
 ﻿/*global Worker, L*/
-/*jslint browser:true*/
+/*jslint browser:true, regexp:true*/
 (function (L) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer;
+	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, categories, priorities, signIcons;
 
 	osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -53,6 +53,194 @@
 			'<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>',
 		maxZoom: 18
 	});
+
+	categories = {
+		"Construction": [
+			"Construction",
+			"Ferry",
+			"Lane Closure",
+			"Maintenance"
+		],
+		"AccidentAlert": [
+			"Abandoned Vehicle",
+			"Alarm",
+			"AMBER Alert",
+			"Bridge",
+			"Brush fire",
+			"Cable Barrier",
+			"Chain Enforcement",
+			"Collision",
+			"Collision fatality",
+			"Complaint",
+			"Dead Animal",
+			"Debris",
+			"Debris blocking",
+			"Disabled vehicle",
+			"Hazardous material",
+			"Fatality or Possible Fatality",
+			"Fire",
+			"Flammable Restriction",
+			"HCB Motor Open",
+			"ITS & IT",
+			"Other",
+			"Pass Report",
+			"Pierce Co. Roads",
+			"Pierce Co. Signs/Signals",
+			"Rocks",
+			"Signals",
+			"Signs",
+			"Special Event",
+			"",
+			"Administrative",
+			"Boat Traffic",
+			"Bridge Lift",
+			"Heavy Traffic",
+			"In Service",
+			"Lakewood",
+			"MBT",
+			"MIL",
+			"ODOT",
+			"Out of Service",
+			"P-1 Sand / Plowing / Deicing",
+			"Pedestrian",
+			"Power Lines",
+			"Road Report",
+			"Sand / Plowing / Deicing",
+			"Shift Change",
+			"Toll",
+			"Utilities"
+		],
+		"RoadClosure": [
+			"Avalanche Control",
+			"Bomb",
+			"Bridge Closed",
+			"Closure",
+			"Emergency closure",
+			"Pass Closure",
+			"Rollover",
+			"Multi-vehicle collision",
+			"Chemical Spill",
+			"Vehicle fire",
+			"Medical emergency",
+			"Major incident",
+			"Semi Truck Involved",
+			"Incident",
+			"Two or more lanes closed",
+			"Rock Slide",
+			"Snow slide",
+			"Hazmat",
+			"HCB Closed Maint",
+			"HCB Closed Marine",
+			"HCB Closed Police",
+			"HCB Closed Winds",
+			"Slide",
+			"Slides",
+			"Water over Roadway",
+			"Rocks - Closure",
+			"Trees",
+			"Hood Canal Bridge"
+		],
+		"Weather": [
+			"Traction Advisory",
+			"Weather",
+			"Weather event"
+		]
+	};
+
+	function createSignIcon(url, folder) {
+		var shadowUrl;
+		if (!url) {
+			throw new TypeError("url is undefined.");
+		}
+		if (!folder) {
+			folder = "images/icons/alert/";
+		}
+		shadowUrl = folder + "shadow.png";
+		return L.icon({
+			iconUrl: folder + url,
+			shadowUrl: shadowUrl,
+			iconSize: [25, 25],
+			iconAnchor: [13, 25],
+			shadowAnchor: [0, 5],
+			shadowSize: [25,9]
+		});
+	}
+
+	function createClosureIcon() {
+		return L.icon({
+			iconUrl: "images/icons/alert/RoadClosure.png",
+			////iconAnchor: [13, 25],
+			iconSize: [25, 25]
+		});
+	}
+
+	priorities = {
+		Unknown: 5,
+		Lowest: 4,
+		Low: 3,
+		Medium: 2,
+		High: 1,
+		Highest: 1
+	};
+
+	function SignIcons() {
+		var types, i, l, p, type;
+		types = ["AccidentAlert", "Construction", "Weather"];
+
+		for (i = 0, l = types.length; i < l; i += 1) {
+			type = types[i];
+			// Create new property for the current type.
+			this[type] = {};
+			for (p in priorities) {
+				if (priorities.hasOwnProperty(p)) {
+					this[type][p] = createSignIcon([type, priorities[p], ".png"].join(""));
+				}
+			}
+		}
+
+		this.RoadClosure = createClosureIcon();
+	}
+
+	SignIcons.prototype.GetIcon = function (feature) {
+		var category, icon, categoryName, categoryList, i, l;
+		if (!(feature && feature.properties)) {
+			throw new TypeError("The feature either is not defined or has no properties.");
+		}
+		// Get the appropriate category for the feature's EventCategory property...
+		for (categoryName in categories) {
+			if (categories.hasOwnProperty(categoryName)) {
+				categoryList = categories[categoryName];
+				for (i = 0, l = categoryList.length; i < l; i += 1) {
+					if (feature.properties.EventCategory === categoryList[i]) {
+						category = categoryName;
+						// Break out of category list loop once match has been found.
+						break;
+					}
+				}
+				// Break out of for in loop if category has been determined.
+				if (category) {
+					break;
+				}
+			}
+		}
+
+		// Default to AccidentAlert if no appropriate category exists.
+		if (!category) {
+			category = "AccidentAlert";
+		}
+
+		if (category === "RoadClosure") {
+			icon = this.RoadClosure;
+		} else {
+			icon = this[category][feature.properties.Priority];
+		}
+
+		return icon;
+	};
+
+	signIcons = new SignIcons();
+
+
 
 	map = L.map('map', {
 		center: [47.41322033015946, -120.80566406246835],
@@ -148,7 +336,7 @@
 
 
 	function setupWebWorker() {
-		worker = new Worker("Scripts/task.min.js");
+		worker = new Worker("Scripts/task.js");
 
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
@@ -158,21 +346,25 @@
 			if (geoJson) {
 				layer = L.geoJson(geoJson, {
 					pointToLayer: function (feature, latLng) {
-						var priority = feature.properties.Priority, color;
+						////var priority = feature.properties.Priority, color;
 
-						color = priority === "Highest" ? "#FF0000"
-							: priority === "High" ? "#550000"
-							: priority === "Medium" ? "#FFFF00"
-							: priority === "Low" ? "#00FF00"
-							: priority === "Lowest" ? "#00CC00"
-							: "#FFFFFF";
-						return L.circleMarker(latLng, {
-							radius: 8,
-							fillColor: color,
-							weight: 1,
-							opacity: 1,
-							fillOpacity: 0.8
-						});
+						////color = priority === "Highest" ? "#FF0000"
+						////	: priority === "High" ? "#550000"
+						////	: priority === "Medium" ? "#FFFF00"
+						////	: priority === "Low" ? "#00FF00"
+						////	: priority === "Lowest" ? "#00CC00"
+						////	: "#FFFFFF";
+						////return L.circleMarker(latLng, {
+						////	radius: 8,
+						////	fillColor: color,
+						////	weight: 1,
+						////	opacity: 1,
+						////	fillOpacity: 0.8
+						////});
+						
+						var icon;
+						icon = signIcons.GetIcon(feature);
+						return L.marker(latLng, { icon: icon });
 					},
 					onEachFeature: function (feature, layer) {
 						layer.bindPopup(createAlertContent(feature));

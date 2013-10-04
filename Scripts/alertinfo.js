@@ -1,4 +1,5 @@
 ﻿/*global require, exports*/
+
 (function () {
 	"use strict";
 
@@ -20,7 +21,7 @@
 				"Lane Closure",
 				"Maintenance"
 			],
-			"Alert": [
+			"AccidentAlert": [
 				"Abandoned Vehicle",
 				"Alarm",
 				"AMBER Alert",
@@ -69,7 +70,7 @@
 				"Toll",
 				"Utilities"
 			],
-			"Closure": [
+			"RoadClosure": [
 				"Avalanche Control",
 				"Bomb",
 				"Bridge Closed",
