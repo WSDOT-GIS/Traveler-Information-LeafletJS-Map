@@ -53,6 +53,7 @@
     <Content Include="images\icons\alert\Construction4.png" />
     <Content Include="images\icons\alert\Construction5.png" />
     <Content Include="images\icons\alert\RoadClosure.png" />
+    <Content Include="images\icons\alert\shadow.png" />
     <Content Include="images\icons\alert\Weather1.png" />
     <Content Include="images\icons\alert\Weather2.png" />
     <Content Include="images\icons\alert\Weather3.png" />
@@ -60,6 +61,7 @@
     <Content Include="images\icons\alert\Weather5.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
+    <Content Include="Scripts\alertinfo.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\index.min.js">
       <DependentUpon>index.js</DependentUpon>
