@@ -114,6 +114,7 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 				else {
 					layer.clearLayers();
 					layer.addLayer(createGeoJsonLayer(geoJson));
+					console.log(layer.toGeoJSON());
 				}
 
 			}

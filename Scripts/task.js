@@ -124,7 +124,7 @@
 			data = new FeatureCollection(data);
 			postMessage(data);
 		};
-		webRequest.open("GET", "../GetAlerts.ashx", true);
+		webRequest.open("GET", "../proxy.ashx?type=HighwayAlerts", true);
 		webRequest.send();
 		return webRequest;
 	}
