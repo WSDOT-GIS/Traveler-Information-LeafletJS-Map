@@ -47,6 +47,24 @@ if (!wsdot) {
 		return [roadwayLocation.Longitude, roadwayLocation.Latitude, null, roadwayLocation.Milepost];
 	}
 
+	function getPositionFromObject(trafficApiObject) {
+		var propName, value, output;
+		if (trafficApiObject) {
+			for (propName in trafficApiObject) {
+				if (trafficApiObject.hasOwnProperty(propName)) {
+					if (roadwayLocationPropNameRe.test(propName)) {
+						value = trafficApiObject[propName];
+						if (value.hasOwnProperty("Longitude") && value.hasOwnProperty("Latitude")) {
+							output = toPosition(value);
+							break;
+						}
+					}
+				}
+			}
+		}
+		return output;
+	}
+
 	/** Creates a GeoJSON geometry object from an alert.
 	 * @returns {Object}
 	 */
@@ -68,7 +86,11 @@ if (!wsdot) {
 				coordinates: toPosition(alert.EndRoadwayLocation)
 			};
 		} else {
-			output = null;
+			output = getPositionFromObject(alert);
+			output = output ? {
+				type: "Point",
+				coordinates: output
+			} : null;
 		}
 
 		return output;

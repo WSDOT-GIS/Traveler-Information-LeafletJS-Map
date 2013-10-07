@@ -10,7 +10,7 @@ requirejs.config({
 
 require(["leaflet", "alertUtils"], function (L, alertUtils) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList;
+	var map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList;
 
 	// Define attribution strings that are common to multiple basemap layers.
 	osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
@@ -83,7 +83,7 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 
 	function setupAlertsWorker() {
-		var layer, signIcons;
+		var worker, layer, signIcons;
 		worker = new Worker("Scripts/alerts_task.js");
 		signIcons = new alertUtils.SignIcons();
 
@@ -121,26 +121,25 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 			}
 		}, false);
 
-		worker.postMessage("It doesn't really matter what this message is.");
+		worker.postMessage("begin");
 	}
 
 	function setupTrafficFlowWorker() {
+		var layer, worker;
 		worker = new Worker("Scripts/trafficflow_task.js");
 
 		function pointToLayer(feature, latLng) {
-			var icon;
-			icon = signIcons.GetIcon(feature);
-			return L.marker(latLng, { icon: icon });
+			return L.marker(latLng);
 		}
 
-		function onEachFeature(feature, layer) {
-			layer.bindPopup(alertUtils.createAlertContent(feature));
-		}
+		////function onEachFeature(feature, layer) {
+		////	layer.bindPopup(alertUtils.createAlertContent(feature));
+		////}
 
 		function createGeoJsonLayer(geoJson) {
 			return L.geoJson(geoJson, {
-				pointToLayer: pointToLayer,
-				onEachFeature: onEachFeature
+				pointToLayer: pointToLayer
+				////onEachFeature: onEachFeature
 			});
 		}
 
@@ -148,20 +147,19 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 			var geoJson = oEvent.data;
 
 			if (geoJson) {
-				console.log("traffic flow", geoJson);
-				////if (!layer) {
-				////	layer = createGeoJsonLayer(geoJson).addTo(map);
-				////	layerList.addOverlay(layer, "Alerts");
-				////}
-				////else {
-				////	layer.clearLayers();
-				////	layer.addLayer(createGeoJsonLayer(geoJson));
-				////}
+				if (!layer) {
+					layer = createGeoJsonLayer(geoJson).addTo(map);
+					layerList.addOverlay(layer, "Traffic Flow");
+				}
+				else {
+					layer.clearLayers();
+					layer.addLayer(createGeoJsonLayer(geoJson));
+				}
 
 			}
 		}, false);
 
-		worker.postMessage("It doesn't really matter what this message is.");
+		worker.postMessage("begin");
 	}
 
 	setupAlertsWorker();
