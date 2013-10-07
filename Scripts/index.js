@@ -1,56 +1,61 @@
-﻿/*global Worker, L*/
+﻿/*global Worker, require, requirejs*/
 /*jslint browser:true, regexp:true*/
-(function (L) {
+
+requirejs.config({
+	paths: {
+		leaflet: "//cdn.leafletjs.com/leaflet-0.6.4/leaflet"
+	}
+});
+
+require(["leaflet"], function (L) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, categories, priorities, signIcons;
+	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, categories, priorities, signIcons, osmAttrib, mqAttrib, ocmAttrib;
+
+	// Define attribution strings that are common to multiple basemap layers.
+	osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
+	mqAttrib = osmAttrib + '<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>';
+	ocmAttrib = osmAttrib + '<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>';
 
 	osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+		attribution: osmAttrib,
 		maxZoom: 18
 	});
 
 	mapQuestOsmLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
 		subdomains: ["otile1", "otile2", "otile3", "otile4"],
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' + 
-			'<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>',
+		attribution: mqAttrib,
 		maxZoom: 18
 	});
 
 	mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
 		subdomains: ["otile1", "otile2", "otile3", "otile4"],
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>',
+		attribution: mqAttrib,
 		maxZoom: 18
 	});
 
 	mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
 		subdomains: ["otile1", "otile2", "otile3", "otile4"],
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>',
+		attribution: mqAttrib,
 		maxZoom: 18
 	});
 
 	openCycleMapLayer = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>',
+		attribution: ocmAttrib,
 		maxZoom: 18
 	});
 
 	ocmTransportLayer = L.tileLayer('http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>',
+		attribution: ocmAttrib,
 		maxZoom: 18
 	});
 
 	ocmLandscapeLayer = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>',
+		attribution: ocmAttrib,
 		maxZoom: 18
 	});
 
 	ocmOutdoorsLayer = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' +
-			'<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>',
+		attribution: ocmAttrib,
 		maxZoom: 18
 	});
 
@@ -162,7 +167,7 @@
 			iconSize: [25, 25],
 			iconAnchor: [13, 25],
 			shadowAnchor: [0, 5],
-			shadowSize: [25,9]
+			shadowSize: [25, 9]
 		});
 	}
 
@@ -249,7 +254,7 @@
 	}).locate({ setView: true, maxZoom: 16 });
 
 	L.control.layers({
-		OpenStreetMap: osmLayer, 
+		OpenStreetMap: osmLayer,
 		"MapQuest OSM": mapQuestOsmLayer,
 		"MapQest Open Aerial": mapQuestOALayer,
 		"OpenCycleMap": openCycleMapLayer,
@@ -331,7 +336,7 @@
 		frag.appendChild(table);
 
 		return frag;
-		
+
 	}
 
 
@@ -361,4 +366,4 @@
 	}
 
 	setupWebWorker();
-}(L));
+});
