@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebWorkerTest", "WebWorkerTest.csproj", "{168CE90D-12F4-4964-A76E-42635905692C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelerLeafletMap", "TravelerLeafletMap.csproj", "{168CE90D-12F4-4964-A76E-42635905692C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

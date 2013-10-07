@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 
-namespace WebWorkerTest
+namespace TravelerLeafletMap
 {
 	/// <summary>
 	/// Summary description for GetAlerts
