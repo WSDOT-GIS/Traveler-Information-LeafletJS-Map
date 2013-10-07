@@ -61,7 +61,7 @@
     <Content Include="images\icons\alert\Weather5.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
-    <Content Include="Scripts\alertinfo.js" />
+    <Content Include="Scripts\alertUtils.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\index.min.js">
       <DependentUpon>index.js</DependentUpon>
