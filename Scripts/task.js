@@ -84,7 +84,7 @@
 					rl = alert[propName];
 					for (rlPropName in rl) {
 						if (rl.hasOwnProperty(rlPropName)) {
-							if (rlPropName !== "Longitude" && rlPropName !== "Latitude" && rlPropName !== "MilePost") {
+							if (rlPropName !== "Longitude" && rlPropName !== "Latitude") {
 								this.properties[match[1] + "_" + rlPropName] = rl[rlPropName];
 							}
 						}

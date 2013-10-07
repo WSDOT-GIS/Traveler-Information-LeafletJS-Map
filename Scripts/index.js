@@ -10,7 +10,7 @@ requirejs.config({
 
 require(["leaflet", "alertUtils"], function (L, alertUtils) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, signIcons, osmAttrib, mqAttrib, ocmAttrib;
+	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, signIcons, osmAttrib, mqAttrib, ocmAttrib, layerList;
 
 	// Define attribution strings that are common to multiple basemap layers.
 	osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
@@ -68,7 +68,7 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 		layers: [osmLayer]
 	}).locate({ setView: true, maxZoom: 16 });
 
-	L.control.layers({
+	layerList = L.control.layers({
 		OpenStreetMap: osmLayer,
 		"MapQuest OSM": mapQuestOsmLayer,
 		"MapQest Open Aerial": mapQuestOALayer,
@@ -86,22 +86,36 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 	function setupWebWorker() {
 		worker = new Worker("Scripts/task.js");
 
+		function pointToLayer(feature, latLng) {
+			var icon;
+			icon = signIcons.GetIcon(feature);
+			return L.marker(latLng, { icon: icon });
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.bindPopup(alertUtils.createAlertContent(feature));
+		}
+
+		function createGeoJsonLayer(geoJson) {
+			return L.geoJson(geoJson, {
+				pointToLayer: pointToLayer,
+				onEachFeature: onEachFeature
+			});
+		}
+
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
-			if (layer) {
-				map.removeLayer(layer);
-			}
+
 			if (geoJson) {
-				layer = L.geoJson(geoJson, {
-					pointToLayer: function (feature, latLng) {
-						var icon;
-						icon = signIcons.GetIcon(feature);
-						return L.marker(latLng, { icon: icon });
-					},
-					onEachFeature: function (feature, layer) {
-						layer.bindPopup(alertUtils.createAlertContent(feature));
-					}
-				}).addTo(map);
+				if (!layer) {
+					layer = createGeoJsonLayer(geoJson).addTo(map);
+					layerList.addOverlay(layer, "Alerts");
+				}
+				else {
+					layer.clearLayers();
+					layer.addLayer(createGeoJsonLayer(geoJson));
+				}
+
 			}
 		}, false);
 
