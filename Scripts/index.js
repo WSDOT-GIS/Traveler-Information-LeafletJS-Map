@@ -128,8 +128,22 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 		var layer, worker;
 		worker = new Worker("Scripts/trafficflow_task.js");
 
+		function valueToColor(value) {
+			return !value ? "white"
+				: value === 1 ? "#0f0"
+				: value === 2 ? "yellow"
+				: value === 3 ? "red"
+				: value === 4 ? "black"
+				: "gray";
+		}
+
 		function pointToLayer(feature, latLng) {
-			return L.marker(latLng);
+			return L.circleMarker(latLng, {
+				radius: 5,
+				fillOpacity: 1,
+				color: "black",
+				fillColor: valueToColor(feature.properties.FlowReadingValue)
+			});
 		}
 
 		////function onEachFeature(feature, layer) {
@@ -145,6 +159,8 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
+
+			console.log(geoJson);
 
 			if (geoJson) {
 				if (!layer) {
