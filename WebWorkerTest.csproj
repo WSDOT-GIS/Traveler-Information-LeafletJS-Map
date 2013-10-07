@@ -61,9 +61,9 @@
     <Content Include="images\icons\alert\Weather5.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
+    <Content Include="Scripts\alerts_task.js" />
     <Content Include="Scripts\alertUtils.js" />
     <Content Include="Scripts\index.js" />
-    <Content Include="Scripts\task.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -77,6 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\task_common.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>

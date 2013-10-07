@@ -84,7 +84,7 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 
 	function setupWebWorker() {
-		worker = new Worker("Scripts/task.js");
+		worker = new Worker("Scripts/alerts_task.js");
 
 		function pointToLayer(feature, latLng) {
 			var icon;
@@ -114,7 +114,6 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 				else {
 					layer.clearLayers();
 					layer.addLayer(createGeoJsonLayer(geoJson));
-					console.log(layer.toGeoJSON());
 				}
 
 			}

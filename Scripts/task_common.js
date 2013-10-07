@@ -1,4 +1,11 @@
-﻿/*global onmessage, postMessage, setInterval*/
+﻿/*global wsdot, onmessage, postMessage, setInterval*/
+
+// Create global level variable "wsdot" if it does not already exist.
+if (!wsdot) {
+	var wsdot = {};
+}
+
+
 (function () {
 	"use strict";
 
@@ -105,34 +112,6 @@
 		this.features = features;
 	}
 
-	/** Sends a request for alerts from the WSDOT Traveler Information API.
-	 * @returns {XMLHttpRequest}
-	 */
-	function sendRequest() {
-		var webRequest = new XMLHttpRequest();
-		webRequest.onload = function () {
-			var data = typeof this.response === "string" ? JSON.parse(this.response, function (k, v) {
-				var output;
-				if (v && v.hasOwnProperty("AlertID")) {
-					output = new Feature(v);
-				} else {
-					output = v;
-				}
-				return output;
-			}) : this.response;
-
-			data = new FeatureCollection(data);
-			postMessage(data);
-		};
-		webRequest.open("GET", "../proxy.ashx?type=HighwayAlerts", true);
-		webRequest.send();
-		return webRequest;
-	}
-
-	// Setup the task's "onmessage" event.
-	onmessage = function (event) {
-		var intervalId;
-		sendRequest();
-		intervalId = setInterval(sendRequest, 60000);
-	};
+	wsdot.Feature = Feature;
+	wsdot.FeatureCollection = FeatureCollection;
 }());
