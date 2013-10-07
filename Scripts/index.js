@@ -83,7 +83,7 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 
 
-	function setupWebWorker() {
+	function setupAlertsWorker() {
 		worker = new Worker("Scripts/alerts_task.js");
 
 		function pointToLayer(feature, latLng) {
@@ -122,5 +122,46 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 		worker.postMessage("It doesn't really matter what this message is.");
 	}
 
-	setupWebWorker();
+	function setupTrafficFlowWorker() {
+		worker = new Worker("Scripts/trafficflow_task.js");
+
+		function pointToLayer(feature, latLng) {
+			var icon;
+			icon = signIcons.GetIcon(feature);
+			return L.marker(latLng, { icon: icon });
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.bindPopup(alertUtils.createAlertContent(feature));
+		}
+
+		function createGeoJsonLayer(geoJson) {
+			return L.geoJson(geoJson, {
+				pointToLayer: pointToLayer,
+				onEachFeature: onEachFeature
+			});
+		}
+
+		worker.addEventListener("message", function (oEvent) {
+			var geoJson = oEvent.data;
+
+			if (geoJson) {
+				console.log("traffic flow", geoJson);
+				////if (!layer) {
+				////	layer = createGeoJsonLayer(geoJson).addTo(map);
+				////	layerList.addOverlay(layer, "Alerts");
+				////}
+				////else {
+				////	layer.clearLayers();
+				////	layer.addLayer(createGeoJsonLayer(geoJson));
+				////}
+
+			}
+		}, false);
+
+		worker.postMessage("It doesn't really matter what this message is.");
+	}
+
+	setupAlertsWorker();
+	setupTrafficFlowWorker();
 });

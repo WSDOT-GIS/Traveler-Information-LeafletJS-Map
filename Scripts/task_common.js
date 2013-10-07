@@ -9,7 +9,7 @@ if (!wsdot) {
 (function () {
 	"use strict";
 
-	var roadwayLocationPropNameRe = /^(\w+)RoadwayLocation$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//;
+	var roadwayLocationPropNameRe = /^(\w+)(?:Roadway)?Location$/, dateRe = /\/Date\((\d+)(-\d+)?\)\//;
 
 	/** Formats a date object into a string.
 	 * @returns {String} Returns date formatted as month-date-year hour:minute.
