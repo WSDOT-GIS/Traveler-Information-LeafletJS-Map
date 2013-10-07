@@ -10,7 +10,7 @@ requirejs.config({
 
 require(["leaflet", "alertUtils"], function (L, alertUtils) {
 	"use strict";
-	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, layer, signIcons, osmAttrib, mqAttrib, ocmAttrib, layerList;
+	var worker, map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList;
 
 	// Define attribution strings that are common to multiple basemap layers.
 	osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
@@ -60,7 +60,6 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 		maxZoom: 18
 	});
 
-	signIcons = new alertUtils.SignIcons();
 
 	map = L.map('map', {
 		center: [47.41322033015946, -120.80566406246835],
@@ -84,7 +83,10 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 
 	function setupAlertsWorker() {
+		var layer, signIcons;
 		worker = new Worker("Scripts/alerts_task.js");
+		signIcons = new alertUtils.SignIcons();
+
 
 		function pointToLayer(feature, latLng) {
 			var icon;
