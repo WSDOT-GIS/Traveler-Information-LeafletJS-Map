@@ -179,12 +179,14 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 	}
 
 	function setupCameraWorker() {
-		var layer, worker;
+		var layer, worker, cameraIcon;
 		worker = new Worker("Scripts/cameras_task.js");
 
 
 		function pointToLayer(feature, latLng) {
-			return L.marker(latLng);
+			return L.marker(latLng, {
+				icon: cameraIcon
+			});
 		}
 
 		////function onEachFeature(feature, layer) {
@@ -197,6 +199,11 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 				////onEachFeature: onEachFeature
 			});
 		}
+
+		cameraIcon = L.icon({
+			iconUrl: "images/icons/camera.png",
+			iconSize: [30, 22]
+		});
 
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;

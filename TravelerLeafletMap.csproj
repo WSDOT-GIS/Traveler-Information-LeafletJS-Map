@@ -59,6 +59,7 @@
     <Content Include="images\icons\alert\Weather3.png" />
     <Content Include="images\icons\alert\Weather4.png" />
     <Content Include="images\icons\alert\Weather5.png" />
+    <Content Include="images\icons\camera.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\alerts_task.js" />
