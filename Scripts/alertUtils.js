@@ -4,7 +4,7 @@
 define(["leaflet"], function (L) {
 	"use strict";
 
-	var priorities, categories;
+	var priorities, categories, SignIcon;
 
 	priorities = {
 			Unknown: 5,
@@ -107,6 +107,17 @@ define(["leaflet"], function (L) {
 		]
 	};
 
+	SignIcon = L.Icon.extend({
+		options: {
+			iconUrl: "images/icons/alert/RoadClosure.png",
+			shadowUrl: "images/icons/alert/shadow.png",
+			iconSize: [25, 25],
+			iconAnchor: [13, 25],
+			shadowAnchor: [0, 5],
+			shadowSize: [25, 9]
+		}
+	});
+
 	function createSignIcon(url, folder) {
 		var shadowUrl;
 		if (!url) {
@@ -116,13 +127,9 @@ define(["leaflet"], function (L) {
 			folder = "images/icons/alert/";
 		}
 		shadowUrl = folder + "shadow.png";
-		return L.icon({
+		return new SignIcon({
 			iconUrl: folder + url,
 			shadowUrl: shadowUrl,
-			iconSize: [25, 25],
-			iconAnchor: [13, 25],
-			shadowAnchor: [0, 5],
-			shadowSize: [25, 9]
 		});
 	}
 
