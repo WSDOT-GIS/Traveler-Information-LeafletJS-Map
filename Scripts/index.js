@@ -160,8 +160,6 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
 
-			console.log(geoJson);
-
 			if (geoJson) {
 				if (!layer) {
 					layer = createGeoJsonLayer(geoJson);
@@ -207,8 +205,6 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 		worker.addEventListener("message", function (oEvent) {
 			var geoJson = oEvent.data;
-
-			console.log(geoJson);
 
 			if (geoJson) {
 				if (!layer) {
