@@ -1,3 +1,6 @@
 [submodule "images/icons"]
 	path = images/icons
 	url = https://github.com/WSDOT-GIS/WSDOT-Traveler-Info-Icons
+[submodule "Scripts/Leaflet.markercluster"]
+	path = Scripts/Leaflet.markercluster
+	url = https://github.com/Leaflet/Leaflet.markercluster

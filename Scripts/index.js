@@ -4,11 +4,12 @@
 requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
-		leaflet: "//cdn.leafletjs.com/leaflet-0.6.4/leaflet"
+		leaflet: "//cdn.leafletjs.com/leaflet-0.6.4/leaflet",
+		markercluster: "Leaflet.markercluster/dist/leaflet.markercluster"
 	}
 });
 
-require(["leaflet", "alertUtils"], function (L, alertUtils) {
+require(["leaflet", "alertUtils", "markercluster"], function (L, alertUtils, markerCluster) {
 	"use strict";
 	var map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList;
 
@@ -208,7 +209,8 @@ require(["leaflet", "alertUtils"], function (L, alertUtils) {
 
 			if (geoJson) {
 				if (!layer) {
-					layer = createGeoJsonLayer(geoJson);
+					layer = new L.MarkerClusterGroup();
+					layer.addLayer(createGeoJsonLayer(geoJson));
 					layerList.addOverlay(layer, "Cameras");
 				}
 				else {
