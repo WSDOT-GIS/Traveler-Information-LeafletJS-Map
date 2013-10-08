@@ -63,6 +63,7 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\alerts_task.js" />
     <Content Include="Scripts\alertUtils.js" />
+    <Content Include="Scripts\cameras_task.js" />
     <Content Include="Scripts\trafficflow_task.js" />
     <Content Include="Scripts\index.js" />
   </ItemGroup>
