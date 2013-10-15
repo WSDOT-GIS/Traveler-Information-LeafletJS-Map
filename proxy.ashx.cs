@@ -43,7 +43,7 @@ namespace TravelerLeafletMap
 
 			// Build the URL.
 			string url = string.Format(fmt, type, methodName, ConfigurationManager.AppSettings["accessCode"]);
-			var request = WebRequest.CreateHttp(url);
+			var request = WebRequest.Create(url);
 			string data;
 			using (var response = (HttpWebResponse)request.GetResponse())
 			{

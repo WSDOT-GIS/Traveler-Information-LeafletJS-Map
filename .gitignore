@@ -29,3 +29,4 @@ _ReSharper*/
 $tf*/
 Web.config
 Web.*.config
+*.pubxml
