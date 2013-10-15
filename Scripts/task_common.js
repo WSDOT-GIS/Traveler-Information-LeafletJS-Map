@@ -144,6 +144,8 @@ if (!wsdot) {
 						}
 
 					}
+				} else if (propName === "RestrictionType") {
+					this.properties.RestrictionType = alert.RestrictionType === 1 ? "RoadRestriction" : alert.RestrictionType === 0 ? "BridgeRestriction" : alert.RestrictionType;
 				} else {
 					this.properties[propName] = toDate(alert[propName]);
 				}

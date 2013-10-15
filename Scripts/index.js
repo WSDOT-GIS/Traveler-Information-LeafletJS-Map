@@ -16,7 +16,7 @@ requirejs.config({
 
 // Check to make sure the browser supports WebWorkers. If it doesn't, inform the user that they need to upgrade.
 if (!window.Worker) {
-	document.body.innerHTML = "<p>This page uses <a href='http://caniuse.com/#feat=webworkers'>WebWorkers</a>, which your browser does not appear to support. Please upgrade to <a href='http://caniuse.com/#feat=webworkers'>one that does</a>.</p>"
+	document.body.innerHTML = "<p>This page uses <a href='http://caniuse.com/#feat=webworkers'>WebWorkers</a>, which your browser does not appear to support. Please upgrade to <a href='http://caniuse.com/#feat=webworkers'>one that does</a>.</p>";
 } else {
 	require(["leaflet", "alertUtils", "markercluster"], function (L, alertUtils) {
 		"use strict";
@@ -315,6 +315,32 @@ if (!window.Worker) {
 			worker.postMessage("begin");
 		}
 
+		function createPopupContent(feature) {
+			var table, row, cell, pName;
+
+			if (feature && feature.properties) {
+				table = document.createElement("table");
+				for (pName in feature.properties) {
+					if (feature.properties.hasOwnProperty(pName)) {
+						////row = document.createElement("tr");
+						////table.appendChild(row);
+						////cell = document.createElement
+						row = table.insertRow();
+						cell = document.createElement("th");
+						cell.innerText = pName;
+						row.appendChild(cell);
+
+						cell = row.insertCell(1);
+						cell.innerText = String(feature.properties[pName]);
+					}
+
+				}
+			}
+
+			return table;
+		}
+
+
 		function setupCVRestrictionsWorker() {
 			var layer, worker;
 			worker = new Worker("Scripts/cvrestrictions_task.js");
@@ -323,14 +349,14 @@ if (!window.Worker) {
 				return L.marker(latLng);
 			}
 
-			////function onEachFeature(feature, layer) {
-			////	layer.bindPopup(alertUtils.createAlertContent(feature));
-			////}
+			function onEachFeature(feature, layer) {
+				layer.bindPopup(createPopupContent(feature));
+			}
 
 			function createGeoJsonLayer(geoJson) {
 				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer
-					////onEachFeature: onEachFeature
+					pointToLayer: pointToLayer,
+					onEachFeature: onEachFeature
 				});
 			}
 
