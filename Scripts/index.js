@@ -315,9 +315,48 @@ if (!window.Worker) {
 			worker.postMessage("begin");
 		}
 
+		function setupCVRestrictionsWorker() {
+			var layer, worker;
+			worker = new Worker("Scripts/cvrestrictions_task.js");
+
+			function pointToLayer(feature, latLng) {
+				return L.marker(latLng);
+			}
+
+			////function onEachFeature(feature, layer) {
+			////	layer.bindPopup(alertUtils.createAlertContent(feature));
+			////}
+
+			function createGeoJsonLayer(geoJson) {
+				return L.geoJson(geoJson, {
+					pointToLayer: pointToLayer
+					////onEachFeature: onEachFeature
+				});
+			}
+
+			worker.addEventListener("message", function (oEvent) {
+				var geoJson = oEvent.data;
+
+				if (geoJson) {
+					if (!layer) {
+						layer = createGeoJsonLayer(geoJson);
+						layerList.addOverlay(layer, "CV Restrictions");
+					}
+					else {
+						layer.clearLayers();
+						layer.addLayer(createGeoJsonLayer(geoJson));
+					}
+
+				}
+			}, false);
+
+			worker.postMessage("begin");
+		}
+
 
 		setupAlertsWorker();
 		setupTrafficFlowWorker();
 		setupCameraWorker();
+		setupCVRestrictionsWorker();
 	});
 }

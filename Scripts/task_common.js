@@ -50,16 +50,41 @@ if (!wsdot) {
 	function getPositionFromObject(trafficApiObject) {
 		var propName, value, output;
 		if (trafficApiObject) {
-			for (propName in trafficApiObject) {
-				if (trafficApiObject.hasOwnProperty(propName)) {
-					if (roadwayLocationPropNameRe.test(propName)) {
-						value = trafficApiObject[propName];
-						if (value.hasOwnProperty("Longitude") && value.hasOwnProperty("Latitude")) {
-							output = toPosition(value);
-							break;
+			if (trafficApiObject.Longitude && trafficApiObject.Latitude) {
+				output = [trafficApiObject.Longitude, trafficApiObject.Latitude];
+			} else {
+				for (propName in trafficApiObject) {
+					if (trafficApiObject.hasOwnProperty(propName)) {
+						if (roadwayLocationPropNameRe.test(propName)) {
+							value = trafficApiObject[propName];
+							if (value.hasOwnProperty("Longitude") && value.hasOwnProperty("Latitude")) {
+								output = toPosition(value);
+								break;
+							}
 						}
 					}
 				}
+			}
+		}
+		return output;
+	}
+
+	/** Validates the coordinates of a roadway location, ensuring that lat and long are non-zero.
+	 * @param {...Object} One or more roadway locations can be passed in as arguments.
+	 * @returns {Boolean}
+	 */
+	function roadwayLocationsAreValid() {
+		var i, l, output, rl;
+		if (arguments.length) {
+			for (i = 0, l = arguments.length; i < l; i += 1) {
+				rl = arguments[i];
+				if (!rl.Longitude && !rl.Latitude) {
+					output = false;
+					break;
+				}
+			}
+			if (output !== false) {
+				output = true;
 			}
 		}
 		return output;
@@ -70,17 +95,17 @@ if (!wsdot) {
 	 */
 	function createGeometry(/**{Object}*/ alert) {
 		var output;
-		if (alert.StartRoadwayLocation && alert.EndRoadwayLocation) {
+		if (alert.StartRoadwayLocation && alert.EndRoadwayLocation && roadwayLocationsAreValid(alert.StartRoadwayLocation, alert.EndRoadwayLocation)) {
 			output = {
 				type: "MultiPoint",
 				coordinates: [toPosition(alert.StartRoadwayLocation), toPosition(alert.EndRoadwayLocation)]
 			};
-		} else if (alert.StartRoadwayLocation) {
+		} else if (alert.StartRoadwayLocation && roadwayLocationsAreValid(alert.StartRoadwayLocation)) {
 			output = {
 				type: "Point",
 				coordinates: toPosition(alert.StartRoadwayLocation)
 			};
-		} else if (alert.EndRoadwayLocation) {
+		} else if (alert.EndRoadwayLocation && roadwayLocationsAreValid(alert.EndRoadwayLocation)) {
 			output = {
 				type: "Point",
 				coordinates: toPosition(alert.EndRoadwayLocation)

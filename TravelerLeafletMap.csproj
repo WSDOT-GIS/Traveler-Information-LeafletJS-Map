@@ -66,6 +66,7 @@
     <Content Include="Scripts\alerts_task.js" />
     <Content Include="Scripts\alertUtils.js" />
     <Content Include="Scripts\cameras_task.js" />
+    <Content Include="Scripts\cvrestrictions_task.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
