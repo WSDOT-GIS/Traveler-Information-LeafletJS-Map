@@ -316,7 +316,7 @@ if (!window.Worker) {
 		}
 
 		function createPopupContent(feature) {
-			var table, row, cell, pName, v, nonZeroMeasureRe = /\w+In((Inches)|(Pounds))/i;
+			var table, row, cell, pName, v, nonZeroMeasureRe = /\w+(?:MaxAxle)|(?:In(?:(?:Inches)|(?:Pounds)))/i;
 
 			if (feature && feature.properties) {
 				table = document.createElement("table");
@@ -325,11 +325,7 @@ if (!window.Worker) {
 
 						v = feature.properties[pName];
 
-						if (v === "") {
-							v = "(empty string)";
-						}
-
-						if (v !== null && pName !== "Longitude" && pName !== "Latitude" && !(nonZeroMeasureRe.test(pName) && !v)) {
+						if (v !== null && v !== "" && pName !== "Longitude" && pName !== "Latitude" && !(nonZeroMeasureRe.test(pName) && !v)) {
 
 							row = table.insertRow();
 							cell = document.createElement("th");
