@@ -316,22 +316,29 @@ if (!window.Worker) {
 		}
 
 		function createPopupContent(feature) {
-			var table, row, cell, pName;
+			var table, row, cell, pName, v, nonZeroMeasureRe = /\w+In((Inches)|(Pounds))/i;
 
 			if (feature && feature.properties) {
 				table = document.createElement("table");
 				for (pName in feature.properties) {
 					if (feature.properties.hasOwnProperty(pName)) {
-						////row = document.createElement("tr");
-						////table.appendChild(row);
-						////cell = document.createElement
-						row = table.insertRow();
-						cell = document.createElement("th");
-						cell.innerText = pName;
-						row.appendChild(cell);
 
-						cell = row.insertCell(1);
-						cell.innerText = String(feature.properties[pName]);
+						v = feature.properties[pName];
+
+						if (v === "") {
+							v = "(empty string)";
+						}
+
+						if (v !== null && pName !== "Longitude" && pName !== "Latitude" && !(nonZeroMeasureRe.test(pName) && !v)) {
+
+							row = table.insertRow();
+							cell = document.createElement("th");
+							cell.innerText = pName;
+							row.appendChild(cell);
+
+							cell = row.insertCell(1);
+							cell.innerText = String(feature.properties[pName]);
+						}
 					}
 
 				}
