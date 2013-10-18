@@ -96,7 +96,7 @@ if (!window.Worker) {
 
 		function setupAlertsWorker() {
 			var worker, layer, signIcons;
-			worker = new Worker("Scripts/alerts_task.js");
+			worker = new Worker("Scripts/tasks/alerts_task.js");
 			signIcons = new alertUtils.SignIcons();
 
 
@@ -138,7 +138,7 @@ if (!window.Worker) {
 
 		function setupTrafficFlowWorker() {
 			var layer, worker;
-			worker = new Worker("Scripts/trafficflow_task.js");
+			worker = new Worker("Scripts/tasks/trafficflow_task.js");
 
 			function valueToColor(value) {
 				return !value ? "white"
@@ -190,7 +190,7 @@ if (!window.Worker) {
 
 		function setupCameraWorker() {
 			var layer, worker, cameraIcon;
-			worker = new Worker("Scripts/cameras_task.js");
+			worker = new Worker("Scripts/tasks/cameras_task.js");
 
 			/** Creates the popup content for a camera feature.
 			 * @returns Element
@@ -346,7 +346,7 @@ if (!window.Worker) {
 
 		function setupCVRestrictionsWorker() {
 			var layer, worker;
-			worker = new Worker("Scripts/cvrestrictions_task.js");
+			worker = new Worker("Scripts/tasks/cvrestrictions_task.js");
 
 			function pointToLayer(feature, latLng) {
 				return L.marker(latLng, {
@@ -386,7 +386,7 @@ if (!window.Worker) {
 
 		function setupTravelTimesWorker() {
 			var layer, worker;
-			worker = new Worker("Scripts/traveltimes_task.js");
+			worker = new Worker("Scripts/tasks/traveltimes_task.js");
 
 			function pointToLayer(feature, latLng) {
 				return L.marker(latLng);

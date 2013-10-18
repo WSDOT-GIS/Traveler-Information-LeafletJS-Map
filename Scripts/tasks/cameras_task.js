@@ -23,7 +23,7 @@
 			data = new wsdot.FeatureCollection(data);
 			postMessage(data);
 		};
-		webRequest.open("GET", "../proxy.ashx?type=HighwayCameras", true);
+		webRequest.open("GET", "../../proxy.ashx?type=HighwayCameras", true);
 		webRequest.send();
 		return webRequest;
 	}

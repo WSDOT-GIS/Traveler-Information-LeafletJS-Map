@@ -12,7 +12,7 @@
 		webRequest.onload = function () {
 			var data = typeof this.response === "string" ? JSON.parse(this.response, function (k, v) {
 				var output;
-				if (v && v.hasOwnProperty("FlowDataID")) {
+				if (v && v.hasOwnProperty("AlertID")) {
 					output = new wsdot.Feature(v);
 				} else {
 					output = v;
@@ -23,7 +23,7 @@
 			data = new wsdot.FeatureCollection(data);
 			postMessage(data);
 		};
-		webRequest.open("GET", "../proxy.ashx?type=TrafficFlow", true);
+		webRequest.open("GET", "../../proxy.ashx?type=HighwayAlerts", true);
 		webRequest.send();
 		return webRequest;
 	}
@@ -32,6 +32,6 @@
 	onmessage = function (event) {
 		var intervalId;
 		sendRequest();
-		intervalId = setInterval(sendRequest, 90000);
+		intervalId = setInterval(sendRequest, 60000);
 	};
 }());

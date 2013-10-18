@@ -1,4 +1,4 @@
-﻿/*global onmessage, postMessage, setInterval*/
+﻿/*global onmessage, postMessage, setInterval, importScripts, wsdot*/
 (function () {
 	"use strict";
 
@@ -12,7 +12,7 @@
 		webRequest.onload = function () {
 			var data = typeof this.response === "string" ? JSON.parse(this.response, function (k, v) {
 				var output;
-				if (v && v.hasOwnProperty("AlertID")) {
+				if (v && v.hasOwnProperty("StateRouteID")) {
 					output = new wsdot.Feature(v);
 				} else {
 					output = v;
@@ -23,15 +23,15 @@
 			data = new wsdot.FeatureCollection(data);
 			postMessage(data);
 		};
-		webRequest.open("GET", "../proxy.ashx?type=HighwayAlerts", true);
+		webRequest.open("GET", "../../proxy.ashx?type=CVRestrictions", true);
 		webRequest.send();
 		return webRequest;
 	}
 
 	// Setup the task's "onmessage" event.
-	onmessage = function (event) {
+	onmessage = function (/*event*/) {
 		var intervalId;
 		sendRequest();
-		intervalId = setInterval(sendRequest, 60000);
+		intervalId = setInterval(sendRequest, 86400000);
 	};
 }());
