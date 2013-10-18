@@ -41,6 +41,28 @@ define(function () {
 		return output;
 	}
 
+	/** Represents a GeoJSON Geometry 
+	 * @constructor
+	 * @param {string} type Valid values: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon
+	 * @param {(Number[]|Array.<Array.<Number>>|Array.<Array.<Array<Number>>>|Array.<Array.<Array.<Array.<Number>>>)} coordinates The coordinates that define the geometry.
+	*/
+	function Geometry(type, coordinates) {
+		this.type = type;
+		this.coordinates = coordinates;
+	}
+
+	/** Represents a GeoJSON Feature 
+	 * @constructor
+	 */
+	function Feature(/** {Geometry} */ geometry, /**{object}*/ properties) {
+		this.geometry = geometry;
+		this.properties = properties;
+	}
+
+	function FeatureCollection(/** {Array} */ features) {
+		this.features = features;
+	}
+
 	/** Describes a specific location on a WA State Highway.
 	 * @constructor
 	 * @param {Object.<string, (string|number)>} [json] An object containing properties to initialize the members.
@@ -68,6 +90,10 @@ define(function () {
 		return this.Longitude && this.Latitude;
 	};
 
+	RoadwayLocation.prototype.toGeoJsonPoint = function () {
+		return new Geometry("Point", [this.Longitude, this.Latitude]);
+	};
+
 	/** Converts the input to a {@link:RoadwayLocation}, or returns the original input if it is already a {@link:RoadwayLocation}.
 	 * @returns {RoadwayLocation}
 	 */
@@ -83,12 +109,27 @@ define(function () {
 		return output;
 	};
 
+	/** Represents a border crossing 
+	 * @constructor
+	 */
 	function BorderCrossingData(json) {
+		/** @member {Date} */
 		this.Time = json ? parseDate(json.Time) : null;
+		/** @member {string} */
 		this.CrossingName = json ? json.CrossingName || null : null;
+		/** @member {RoadwayLocation} */
 		this.BorderCrossingLocation = json ? RoadwayLocation.toRoadwayLocation(json.BorderCrossingLocation) : null;
+		/** @member {number} */
 		this.WaitTime = json ? json.WaitTime || null : null;
 	}
+
+	////BorderCrossingData.toFeature = function() {
+	////	return new Feature(this.BorderCrossingLocation.toGeoJsonPoint(), {
+	////		Time: this.Time,
+	////		CrossingName: this.CrossingName,
+	////		WaitTime: this.WaitTime
+	////	});
+	////}
 
 	/** Represents a Commercial Vehicle Restriction. 
 	 * @member {string} StateRouteID
@@ -257,9 +298,9 @@ define(function () {
 		/** @member {bool} TravelAdvisoryActive Indicates if a travel advisory is active. */
 		this.TravelAdvisoryActive = json ? json.TravelAdvisoryActive || null : null;
 		/** @member {TravelRestriction} RestrictionOne The travel restriction in the primary direction. */
-		this.RestrictionOne = json ? json.RestrictionOne || null : null;
+		this.RestrictionOne = json ? new TravelRestriction(json.RestrictionOne) : null;
 		/** @member {TravelRestriction} RestrictionTwo The travel restriction in the secondary direction. */
-		this.RestrictionTwo = json ? json.RestrictionTwo || null : null;
+		this.RestrictionTwo = json ? new TravelRestriction(json.RestrictionTwo) : null;
 	}
 
 	/** Gets the text string corresponding to the integery FlowStationReading value
@@ -271,7 +312,7 @@ define(function () {
 			: n === 2 ? "Moderate"
 			: n === 3 ? "Heavy"
 			: n === 4 ? "StopAndGo"
-			: "NoData"
+			: "NoData";
 	}
 
 	/** A data structure that represents a Flow Station 
@@ -316,7 +357,84 @@ define(function () {
 		this.CurrentTime = json ? getNumberOrNull(json.CurrentTime) : null;
 	}
 
+	/** Determine which constructor to use based on property names of input object.
+	 * @returns {function}
+	 * @throws {TypeError} Thrown if json is null.
+	 */
+	function determineConstructor(/** {object} */ json) {
+		var output;
+		if (!json) {
+			throw new TypeError("Input cannot be null or undefined.");
+		}
+		if (json.hasOwnProperty("CrossingName")) {
+			output = BorderCrossingData;
+		} else if (json.hasOwnProperty("RestrictionType")) {
+			output = CVRestrictionData;
+		} else if (json.hasOwnProperty("AlertID")) {
+			output = Alert;
+		} else if (json.hasOwnProperty("CameraID")) {
+			output = Camera;
+		} else if (json.hasOwnProperty("MountainPassId")) {
+			output = PassCondition;
+		} else if (json.hasOwnProperty("FlowDataID")) {
+			output = FlowData;
+		} else if (json.hasOwnProperty("TravelTimeID")) {
+			return TravelTimeRoute;
+		}
+
+		return output;
+	}
+
+	/** Converts an array of objects into a feature collection.
+	 * @returns {FeatureCollection}
+	 */
+	function toFeatureCollection(/**{Array}*/ a) {
+		var output;
+		if (a) {
+			output = [];
+			for (var i = 0, l = a.length; i < l; i += 1) {
+				output.push(toGeoJson(a[i]));
+			}
+		}
+		if (output) {
+			output = new FeatureCollection(output);
+		}
+		return output;
+	}
+
+	function toGeoJson(obj) {
+		var output;
+		if (obj) {
+			if (obj instanceof Array) {
+				output = toFeatureCollection(obj);
+			}
+			else if (obj instanceof BorderCrossingData) {
+				output = new Feature(new Geometry("Point", obj.BorderCrossingLocation.toGeoJsonPoint()), obj);
+			} else if (obj instanceof CVRestrictionData || obj instanceof PassCondition) {
+				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]));
+			} else if (obj instanceof Camera) {
+				// Camera objects have two sets of coordinates available. If the CameraLocation is not valid, use DisplayLongitude, DisplayLatitude instead.
+				output = new Feature(new Geometry("Point", obj.CameraLocation.isLocationValid() ? [obj.CameraLocation.Longitude, obj.CameraLocation.Latitude] : [obj.DisplayLongitude, obj.DisplayLatitude]), obj);
+			} else if (obj instanceof FlowData) {
+				output = new Feature(new Geometry("Point", obj.FlowStationLocation.toGeoJsonPoint()), obj);
+			} else if (obj instanceof TravelTimeRoute) {
+				output = new Feature(new Geometry("MultiPoint", [
+					[obj.StartPoint.Longitude, obj.StartPoint.Latitude],
+					[obj.EndPoint.Longitude, obj.EndPoint.Latitude]
+				]), obj);
+			} else if (obj instanceof Alert) {
+				output = new Feature(new Geometry("MultiPoint", [
+					[obj.StartRoadwayLocation.Longitude, obj.StartRoadwayLocation.Latitude],
+					[obj.EndRoadwayLocation.Longitude, obj.EndRoadwayLocation.Latitude]
+				]), obj);
+			}
+		}
+
+		return output;
+	}
+
 	return {
+		determineConstructor: determineConstructor,
 		RoadwayLocation: RoadwayLocation,
 		BorderCrossingData: BorderCrossingData,
 		CVRestrictionData: CVRestrictionData,

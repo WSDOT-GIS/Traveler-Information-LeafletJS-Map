@@ -67,6 +67,7 @@
     <Content Include="Scripts\alertUtils.js" />
     <Content Include="Scripts\cameras_task.js" />
     <Content Include="Scripts\cvrestrictions_task.js" />
+    <Content Include="Scripts\cvrestrictions_task.min.js" />
     <Content Include="Scripts\index.min.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
@@ -95,6 +96,7 @@
     <Content Include="Scripts\task_common.js" />
     <Content Include="Scripts\traveltimes_task.min.js" />
     <Content Include="Scripts\wsdot\traffic\main.js" />
+    <Content Include="Scripts\wsdot\traffic\main.min.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>
