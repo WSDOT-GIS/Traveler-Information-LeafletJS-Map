@@ -1,6 +1,4 @@
-﻿/*global wsdot, onmessage, postMessage, setInterval*/
-
-// Create global level variable "wsdot" if it does not already exist.
+﻿// Create global level variable "wsdot" if it does not already exist.
 if (!wsdot) {
 	var wsdot = {};
 }
@@ -88,26 +86,6 @@ if (!wsdot) {
 			}
 		}
 		return output;
-	}
-
-	function LocationPropertyInfo(apiData) {
-		var locationRe = /(\w+)(?:(?:RoadwayLocation)|(?:Point))/i, match, startRe = /Start/i, endRe = /End/i;
-
-		this.start = null;
-		this.end = null;
-
-		for (var propName in apiData) {
-			if (apiData.hasOwnProperty(propName)) {
-				match = propName.match(locationRe);
-				if (match) {
-					if (match.length >= 2 && endRe.test(match[1])) {
-						this.end = apiData[match[1]];
-					} else {
-						this.start = apiData[match[1]];
-					}
-				}
-			}
-		}
 	}
 
 	/** Creates a GeoJSON geometry object from an alert.

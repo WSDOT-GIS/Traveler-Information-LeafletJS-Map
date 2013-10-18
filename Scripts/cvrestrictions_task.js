@@ -1,4 +1,4 @@
-﻿/*global onmessage, postMessage, setInterval*/
+﻿/*global onmessage, postMessage, setInterval, importScripts, wsdot*/
 (function () {
 	"use strict";
 
@@ -29,7 +29,7 @@
 	}
 
 	// Setup the task's "onmessage" event.
-	onmessage = function (event) {
+	onmessage = function (/*event*/) {
 		var intervalId;
 		sendRequest();
 		intervalId = setInterval(sendRequest, 86400000);
