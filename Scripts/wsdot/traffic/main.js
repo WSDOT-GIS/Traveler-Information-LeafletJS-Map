@@ -123,14 +123,6 @@ define(function () {
 		this.WaitTime = json ? json.WaitTime || null : null;
 	}
 
-	////BorderCrossingData.toFeature = function() {
-	////	return new Feature(this.BorderCrossingLocation.toGeoJsonPoint(), {
-	////		Time: this.Time,
-	////		CrossingName: this.CrossingName,
-	////		WaitTime: this.WaitTime
-	////	});
-	////}
-
 	/** Represents a Commercial Vehicle Restriction. 
 	 * @member {string} StateRouteID
 	 * @member {string} State
@@ -402,10 +394,14 @@ define(function () {
 		return output;
 	}
 
+	/** Converts an object into a GeoJSON object.
+	 */
 	function toGeoJson(obj) {
 		var output;
 		if (obj) {
-			if (obj instanceof Array) {
+			if (typeof obj.toFeature === "function") {
+				output = obj.toFeature();
+			} else if (obj instanceof Array) {
 				output = toFeatureCollection(obj);
 			}
 			else if (obj instanceof BorderCrossingData) {
@@ -433,8 +429,28 @@ define(function () {
 		return output;
 	}
 
+	/** A "reviver" function to use with the JSON.parse function that will create classes defined in this module where appropriate.
+	 */
+	function parseJson(/**{string}*/k, v) {
+		var output, constructor;
+
+		if (v) {
+			constructor = determineConstructor(v);
+			if (constructor) {
+				output = new constructor(v);
+			}
+			if (!output) {
+				output = v;
+			}
+		} else {
+			output = v;
+		}
+		return output;
+	}
+
 	return {
 		determineConstructor: determineConstructor,
+		parseJson: parseJson,
 		RoadwayLocation: RoadwayLocation,
 		BorderCrossingData: BorderCrossingData,
 		CVRestrictionData: CVRestrictionData,
