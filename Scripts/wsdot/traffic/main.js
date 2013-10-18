@@ -84,7 +84,7 @@ define(function () {
 	};
 
 	function BorderCrossingData(json) {
-		this.Time = json ? json.Time || null : null;
+		this.Time = json ? parseDate(json.Time) : null;
 		this.CrossingName = json ? json.CrossingName || null : null;
 		this.BorderCrossingLocation = json ? RoadwayLocation.toRoadwayLocation(json.BorderCrossingLocation) : null;
 		this.WaitTime = json ? json.WaitTime || null : null;
@@ -181,29 +181,29 @@ define(function () {
 		/** @member {string} HeadlineDescription Information about what the alert has been issued for*/ 
 		this.HeadlineDescription = json ? json.HeadlineDescription || null : null;
 		/** @member {DateTime} LastUpdatedTime When was alert was last changed*/ 
-		this.LastUpdatedTime = json ? json.LastUpdatedTime || null : null;
+		this.LastUpdatedTime = json ? parseDate(json.LastUpdatedTime) : null;
 		/** @member {string} Priority Expected impact on traffic, highest, high, medium, low*/ 
 		this.Priority = json ? json.Priority || null : null;
 		/** @member {string} Region WSDOT Region which entered the alert*/ 
 		this.Region = json ? json.Region || null : null;
 		/** @member {RoadwayLocation} StartRoadwayLocation Start location for the alert on the roadway*/ 
-		this.StartRoadwayLocation = json ? json.StartRoadwayLocation || null : null;
+		this.StartRoadwayLocation = json ? RoadwayLocation.toRoadwayLocation(json.StartRoadwayLocation) : null;
 		/** @member {RoadwayLocation} EndRoadwayLocation End location for the alert on the roadway */ 
-		this.EndRoadwayLocation = json ? json.EndRoadwayLocation || null : null;
+		this.EndRoadwayLocation = json ? RoadwayLocation.toRoadwayLocation(json.EndRoadwayLocation) : null;
 	}
 
 	/** Represents a traffic camera */
 	function Camera(json) {
 		/** @member {int} */
-		this.CameraID = json ? json.CameraID || null : null;
+		this.CameraID = json ? getNumberOrNull(json.CameraID) : null;
 		/** @member {string} */
 		this.Region = json ? json.Region || null : null;
 		/** @member {RoadwayLocation} */
-		this.CameraLocation = json ? json.CameraLocation || null : null;
+		this.CameraLocation = json ? RoadwayLocation.toRoadwayLocation(json.CameraLocation) : null;
 		/** @member {double} */
-		this.DisplayLatitude = json ? json.DisplayLatitude || null : null;
+		this.DisplayLatitude = json ? getNumberOrNull(json.DisplayLatitude) : null;
 		/** @member {double} */
-		this.DisplayLongitude = json ? json.DisplayLongitude || null : null;
+		this.DisplayLongitude = json ? getNumberOrNull(json.DisplayLongitude) : null;
 		/** @member {string} */
 		this.Title = json ? json.Title || null : null;
 		/** @member {string} */
@@ -215,13 +215,13 @@ define(function () {
 		/** @member {string} */
 		this.OwnerURL = json ? json.OwnerURL || null : null;
 		/** @member {int} */
-		this.ImageWidth = json ? json.ImageWidth || null : null;
+		this.ImageWidth = json ? getNumberOrNull(json.ImageWidth) : null;
 		/** @member {int} */
-		this.ImageHeight = json ? json.ImageHeight || null : null;
+		this.ImageHeight = json ? getNumberOrNull(json.ImageHeight) : null;
 		/** @member {bool} */
 		this.IsActive = json ? json.IsActive || null : null;
 		/** @member {int} */
-		this.SortOrder = json ? json.SortOrder || null : null;
+		this.SortOrder = json ? getNumberOrNull(json.SortOrder) : null;
 	}
 
 	/** A travel restriction for moutain passes. */
@@ -241,9 +241,9 @@ define(function () {
 		/** @member {string} MountainPassName A friendly name for a mountain pass. */
 		this.MountainPassName = json ? json.MountainPassName || null : null;
 		/** @member {double} Latitude The latitude of the mountain pass. */
-		this.Latitude = json ? json.Latitude || null : null;
+		this.Latitude = json ? getNumberOrNull(json.Latitude) : null;
 		/** @member {double} Longitude The longitude of the mountain pass. */
-		this.Longitude = json ? json.Longitude || null : null;
+		this.Longitude = json ? getNumberOrNull(json.Longitude) : null;
 		/** @member {DateTime} DateUpdated The time the PassCondition was updated. */
 		this.DateUpdated = json ? json.DateUpdated || null : null;
 		/** @member {int} TemperatureInFahrenheit The temperature reading at the mountain pass in degrees fahrenheit.	 */
@@ -262,22 +262,34 @@ define(function () {
 		this.RestrictionTwo = json ? json.RestrictionTwo || null : null;
 	}
 
+	/** Gets the text string corresponding to the integery FlowStationReading value
+	 * @returns {string}
+	 */
+	function getFlowStationReading(/** {Number} */ n) {
+		return !n ? "Unknown"
+			: n === 1 ? "WideOpen"
+			: n === 2 ? "Moderate"
+			: n === 3 ? "Heavy"
+			: n === 4 ? "StopAndGo"
+			: "NoData"
+	}
+
 	/** A data structure that represents a Flow Station 
 	 * @constructor
 	 */
 	function FlowData(json) {
 		/** @member {int} FlowDataID A unique ID that identifies a specific station. */
-		this.FlowDataID = json ? json.FlowDataID || null : null;
+		this.FlowDataID = json ? getNumberOrNull(json.FlowDataID) : null;
 		/** @member {DateTime} Time The time of the station reading. */
-		this.Time = json ? json.Time || null : null;
+		this.Time = json ? parseDate(json.Time) : null;
 		/** @member {string} StationName The name of the flow station. */
 		this.StationName = json ? json.StationName || null : null;
 		/** @member {string} Region The region that maintains the flow station. */
 		this.Region = json ? json.Region || null : null;
 		/** @member {RoadwayLocation} FlowStationLocation The location of the flow station. */
-		this.FlowStationLocation = json ? json.FlowStationLocation || null : null;
-		/** @member {FlowStationReading} FlowReadingValue The current traffic condition at the flow station.  */
-		this.FlowReadingValue = json ? json.FlowReadingValue || null : null;
+		this.FlowStationLocation = json ? RoadwayLocation.toRoadwayLocation(json.FlowStationLocation) : null;
+		/** @member {string} FlowReadingValue The current traffic condition at the flow station.  */
+		this.FlowReadingValue = json ? getFlowStationReading(json.FlowReadingValue) : null;
 	}
 
 	/* Data structure that represents a travel time route.
@@ -285,23 +297,23 @@ define(function () {
 	 */
 	function TravelTimeRoute(json) {
 		/** @member {int} TravelTimeID Unique ID that is specific to a route. */
-		this.TravelTimeID = json ? json.TravelTimeID || null : null;
+		this.TravelTimeID = json ? getNumberOrNull(json.TravelTimeID) : null;
 		/** @member {string} Name A friendly name for the route. */
 		this.Name = json ? json.Name || null : null;
 		/** @member {string} Description A description for the route. */
 		this.Description = json ? json.Description || null : null;
 		/** @member {DateTime} TimeUpdated The last time that the data for this route was updated. */
-		this.TimeUpdated = json ? json.TimeUpdated || null : null;
+		this.TimeUpdated = json ? parseDate(json.TimeUpdated) : null;
 		/** @member {RoadwayLocation} StartPoint The location where this route begins. */
-		this.StartPoint = json ? json.StartPoint || null : null;
+		this.StartPoint = json ? RoadwayLocation.toRoadwayLocation(json.StartPoint) : null;
 		/** @member {RoadwayLocation} EndPoint The location where this route ends. */
-		this.EndPoint = json ? json.EndPoint || null : null;
+		this.EndPoint = json ? RoadwayLocation.toRoadwayLocation(json.EndPoint) : null;
 		/** @member {decimal} Distance Total distance of this route in miles. */
-		this.Distance = json ? json.Distance || null : null;
+		this.Distance = json ? getNumberOrNull(json.Distance) : null;
 		/** @member {int} AverageTime The average time in minutes that it takes to complete this route. */
-		this.AverageTime = json ? json.AverageTime || null : null;
+		this.AverageTime = json ? getNumberOrNull(json.AverageTime) : null;
 		/** @member {int} CurrentTime The current estimated time in minutes that it takes to complete this route.  */
-		this.CurrentTime = json ? json.CurrentTime || null : null;
+		this.CurrentTime = json ? getNumberOrNull(json.CurrentTime) : null;
 	}
 
 	return {
