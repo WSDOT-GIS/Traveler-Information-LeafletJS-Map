@@ -67,9 +67,12 @@
     <Content Include="Scripts\alertUtils.js" />
     <Content Include="Scripts\cameras_task.js" />
     <Content Include="Scripts\cvrestrictions_task.js" />
+    <Content Include="Scripts\index.min.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
+    <Content Include="Scripts\task_common.min.js" />
+    <Content Include="Scripts\traveltimes_task.js" />
     <Content Include="Scripts\trafficflow_task.js" />
     <Content Include="Scripts\index.js" />
   </ItemGroup>
@@ -90,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\task_common.js" />
+    <Content Include="Scripts\traveltimes_task.min.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>
@@ -98,6 +102,15 @@
     <Content Include="README.md" />
     <Content Include="proxy.ashx" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <Content Include="Scripts\traveltimes_task.min.js.map">
+      <DependentUpon>traveltimes_task.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\index.min.js.map">
+      <DependentUpon>index.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\task_common.min.js.map">
+      <DependentUpon>task_common.js</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

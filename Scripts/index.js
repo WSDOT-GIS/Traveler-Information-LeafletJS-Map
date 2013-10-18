@@ -349,7 +349,9 @@ if (!window.Worker) {
 			worker = new Worker("Scripts/cvrestrictions_task.js");
 
 			function pointToLayer(feature, latLng) {
-				return L.marker(latLng);
+				return L.marker(latLng, {
+					title: feature.properties.LocationDescription
+				});
 			}
 
 			function onEachFeature(feature, layer) {
@@ -382,10 +384,50 @@ if (!window.Worker) {
 			worker.postMessage("begin");
 		}
 
+		function setupTravelTimesWorker() {
+			var layer, worker;
+			worker = new Worker("Scripts/traveltimes_task.js");
+
+			function pointToLayer(feature, latLng) {
+				return L.marker(latLng);
+			}
+
+			function onEachFeature(feature, layer) {
+				layer.bindPopup(createPopupContent(feature));
+			}
+
+			function createGeoJsonLayer(geoJson) {
+				return L.geoJson(geoJson, {
+					pointToLayer: pointToLayer,
+					onEachFeature: onEachFeature
+				});
+			}
+
+			worker.addEventListener("message", function (oEvent) {
+				var geoJson = oEvent.data;
+
+				console.log(geoJson);
+
+				if (geoJson) {
+					if (!layer) {
+						layer = createGeoJsonLayer(geoJson);
+						layerList.addOverlay(layer, "Travel Times");
+					}
+					else {
+						layer.clearLayers();
+						layer.addLayer(createGeoJsonLayer(geoJson));
+					}
+
+				}
+			}, false);
+
+			worker.postMessage("begin");
+		}
 
 		setupAlertsWorker();
 		setupTrafficFlowWorker();
 		setupCameraWorker();
 		setupCVRestrictionsWorker();
+		setupTravelTimesWorker();
 	});
 }
