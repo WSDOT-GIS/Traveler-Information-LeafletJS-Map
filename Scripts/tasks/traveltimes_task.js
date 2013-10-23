@@ -2,7 +2,7 @@
 (function () {
 	"use strict";
 
-	importScripts("../wsdot/traffic/main.js");
+	importScripts("../WsdotTraffic.min.js");
 
 	/** Sends a request for alerts from the WSDOT Traveler Information API.
 	 * @returns {XMLHttpRequest}

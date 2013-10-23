@@ -65,7 +65,9 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\tasks\alerts_task.js" />
     <Content Include="Scripts\alertUtils.js" />
+    <Content Include="Scripts\tasks\alerts_task.min.js" />
     <Content Include="Scripts\tasks\cameras_task.js" />
+    <Content Include="Scripts\tasks\cameras_task.min.js" />
     <Content Include="Scripts\tasks\cvrestrictions_task.js" />
     <Content Include="Scripts\tasks\cvrestrictions_task.min.js" />
     <Content Include="Scripts\index.min.js" />
@@ -73,6 +75,7 @@
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
     <Content Include="Scripts\tasks\task_common.min.js" />
+    <Content Include="Scripts\tasks\trafficflow_task.min.js" />
     <Content Include="Scripts\tasks\traveltimes_task.js" />
     <Content Include="Scripts\tasks\trafficflow_task.js" />
     <Content Include="Scripts\index.js" />
@@ -95,8 +98,8 @@
   <ItemGroup>
     <Content Include="Scripts\tasks\task_common.js" />
     <Content Include="Scripts\tasks\traveltimes_task.min.js" />
-    <Content Include="Scripts\wsdot\traffic\main.js" />
-    <Content Include="Scripts\wsdot\traffic\main.min.js" />
+    <Content Include="Scripts\WsdotTraffic.js" />
+    <Content Include="Scripts\WsdotTraffic.min.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>
@@ -114,9 +117,6 @@
     <Content Include="Scripts\tasks\task_common.min.js.map">
       <DependentUpon>task_common.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\wsdot\traffic\main.min.js.map">
-      <DependentUpon>main.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\tasks\cvrestrictions_task.min.js.map">
       <DependentUpon>cvrestrictions_task.js</DependentUpon>
     </Content>
@@ -128,6 +128,9 @@
     </Content>
     <Content Include="Scripts\tasks\trafficflow_task.min.js.map">
       <DependentUpon>trafficflow_task.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\WsdotTraffic.min.js.map">
+      <DependentUpon>WsdotTraffic.js</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
