@@ -23,6 +23,6 @@
 	onmessage = function (/*event*/) {
 		var intervalId;
 		sendRequest();
-		intervalId = setInterval(sendRequest, 86400000);
+		intervalId = setInterval(sendRequest, 360000);
 	};
 }());

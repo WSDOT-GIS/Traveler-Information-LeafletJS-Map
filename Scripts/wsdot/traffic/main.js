@@ -68,11 +68,13 @@
 	}
 
 	/** "Flattens" the properties of an object so that there are no inner-objects.
-	*/
-	function flattenProperties(/**{object}*/ o) {
+	 * @param {object} o
+	 * @param {string} [ignoredName] The name of a property to be ignored. Intended for use with the feature ID.
+	 */
+	function flattenProperties(o, ignoredName) {
 		var k, k2, v, output = {};
 		for (k in o) {
-			if (o.hasOwnProperty(k)) {
+			if (o.hasOwnProperty(k) && !(ignoredName && k === ignoredName)) {
 				v = o[k];
 				if (typeof v === "object") {
 					for (k2 in v) {
@@ -88,15 +90,47 @@
 		return output;
 	}
 
+	/**
+	 * @typedef GetIdOutput
+	 * @type {object}
+	 * @property {string} id
+	 * @property {number} value
+	 */
+
+	/** Checks the list of properties for a property that can be used as an ID.
+	 * @returns {GetIdOutput}
+	 */
+	function getId(/**{object}*/ properties) {
+		var re, name, value, output;
+
+		if (typeof properties === "object") {
+			re = /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
+			for (name in properties) {
+				if (properties.hasOwnProperty(name) && re.test(name)) {
+					output = {
+						name: name,
+						value: properties[name]
+					};
+					break;
+				}
+			}
+		}
+		return output;
+	}
+
 	/** Represents a GeoJSON Feature 
 	 * @constructor
 	 */
 	function Feature(/** {Geometry} */ geometry, /**{object}*/ properties) {
+		var idInfo = getId(properties);
+		this.id = idInfo ? idInfo.value : null;
 		this.type = "Feature";
 		this.geometry = geometry;
-		this.properties = flattenProperties(properties);
+		this.properties = flattenProperties(properties, idInfo ? idInfo.name : null);
 	}
 
+	/** A GeoJSON feature collection.
+	*/
 	function FeatureCollection(/** {Array} */ features) {
 		this.features = features;
 	}

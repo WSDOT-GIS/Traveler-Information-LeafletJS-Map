@@ -406,8 +406,6 @@ if (!window.Worker) {
 			worker.addEventListener("message", function (oEvent) {
 				var geoJson = oEvent.data;
 
-				console.log(oEvent);
-
 				if (geoJson) {
 					if (!layer) {
 						layer = createGeoJsonLayer(geoJson);
