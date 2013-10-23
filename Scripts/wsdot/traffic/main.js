@@ -1,6 +1,19 @@
-﻿/*global define*/
+﻿/*global define, module*/
 
-define(function () {
+(function (root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(factory);
+	} else if (typeof exports === 'object') {
+		// Node. Does not work with strict CommonJS, but
+		// only CommonJS-like enviroments that support module.exports,
+		// like Node.
+		module.exports = factory();
+	} else {
+		// Browser globals (root is window)
+		root.WsdotTraffic = factory();
+	}
+}(this, function () {
 
 	/** Returns null if input is null or undefined. Otherwise returns the input 
 	 * converted to a number via Number function (or if it was already a number
@@ -31,12 +44,15 @@ define(function () {
 			match = value.match(dateRe);
 			if (match) {
 				if (match.length >= 3) {
-					output = new Date(Number(match[1]) + Number(match[2]));
+					output = new Date(Number(match[2]) + Number(match[3]));
 				} else {
 					output = new Date(Number(match[1]));
 				}
-				//output = formatDate(output);
 			}
+		}
+
+		if (!output) {
+			output = value;
 		}
 		return output;
 	}
@@ -51,12 +67,34 @@ define(function () {
 		this.coordinates = coordinates;
 	}
 
+	/** "Flattens" the properties of an object so that there are no inner-objects.
+	*/
+	function flattenProperties(/**{object}*/ o) {
+		var k, k2, v, output = {};
+		for (k in o) {
+			if (o.hasOwnProperty(k)) {
+				v = o[k];
+				if (typeof v === "object") {
+					for (var k2 in v) {
+						if (v.hasOwnProperty(k2)) {
+							output[[k, k2].join("_")] = v[k2];
+						}
+					}
+				} else {
+					output[k] = v;
+				}
+			}
+		}
+		return output;
+	}
+
 	/** Represents a GeoJSON Feature 
 	 * @constructor
 	 */
 	function Feature(/** {Geometry} */ geometry, /**{object}*/ properties) {
+		this.type = "Feature";
 		this.geometry = geometry;
-		this.properties = properties;
+		this.properties = flattenProperties(properties);
 	}
 
 	function FeatureCollection(/** {Array} */ features) {
@@ -448,9 +486,28 @@ define(function () {
 		return output;
 	}
 
+	function parseAsGeoJson(/**{string}*/k, v) {
+		var output, constructor;
+
+		if (v) {
+			constructor = determineConstructor(v);
+			if (constructor) {
+				output = new constructor(v);
+				output = toGeoJson(output);
+			}
+			if (!output) {
+				output = v;
+			}
+		} else {
+			output = v;
+		}
+		return output;
+	}
+
 	return {
 		determineConstructor: determineConstructor,
 		parseJson: parseJson,
+		parseAsGeoJson: parseAsGeoJson,
 		RoadwayLocation: RoadwayLocation,
 		BorderCrossingData: BorderCrossingData,
 		CVRestrictionData: CVRestrictionData,
@@ -461,4 +518,4 @@ define(function () {
 		FlowData: FlowData,
 		TravelTimeRoute: TravelTimeRoute
 	};
-});
+}));

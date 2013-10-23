@@ -406,7 +406,7 @@ if (!window.Worker) {
 			worker.addEventListener("message", function (oEvent) {
 				var geoJson = oEvent.data;
 
-				console.log(geoJson);
+				console.log(oEvent);
 
 				if (geoJson) {
 					if (!layer) {
@@ -420,6 +420,10 @@ if (!window.Worker) {
 
 				}
 			}, false);
+
+			worker.addEventListener("error", function (/*{Error}*/ e) {
+				console.error("task error", e);
+			});
 
 			worker.postMessage("begin");
 		}
