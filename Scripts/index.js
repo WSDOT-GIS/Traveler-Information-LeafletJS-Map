@@ -134,6 +134,8 @@ if (!window.Worker) {
 			}, false);
 
 			worker.postMessage("begin");
+
+			return worker;
 		}
 
 		function setupTrafficFlowWorker() {
@@ -186,6 +188,8 @@ if (!window.Worker) {
 			}, false);
 
 			worker.postMessage("begin");
+
+			return worker;
 		}
 
 		function setupCameraWorker() {
@@ -313,6 +317,8 @@ if (!window.Worker) {
 
 			// Start the worker.  Presently, the content of text passed to the worker here does not matter.
 			worker.postMessage("begin");
+
+			return worker;
 		}
 
 		function createPopupContent(feature) {
@@ -382,6 +388,8 @@ if (!window.Worker) {
 			}, false);
 
 			worker.postMessage("begin");
+
+			return worker;
 		}
 
 		function setupTravelTimesWorker() {
@@ -424,6 +432,8 @@ if (!window.Worker) {
 			});
 
 			worker.postMessage("begin");
+
+			return worker;
 		}
 
 		setupAlertsWorker();
