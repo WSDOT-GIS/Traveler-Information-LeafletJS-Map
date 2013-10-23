@@ -75,7 +75,7 @@
 			if (o.hasOwnProperty(k)) {
 				v = o[k];
 				if (typeof v === "object") {
-					for (var k2 in v) {
+					for (k2 in v) {
 						if (v.hasOwnProperty(k2)) {
 							output[[k, k2].join("_")] = v[k2];
 						}
