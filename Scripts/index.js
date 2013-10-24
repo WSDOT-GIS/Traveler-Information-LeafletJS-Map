@@ -349,25 +349,40 @@ if (!window.Worker) {
 			return table;
 		}
 
+		function performDefaultMarkerCreation(feature, latLng) {
+			return L.marker(latLng);
+		}
 
-		function createWorker(taskUrl, layerName, apiType, ticks) {
+		function performDefaultPerFeatureTasks(feature, layer) {
+			layer.bindPopup(createPopupContent(feature));
+		}
+
+		/** Creates a GeoJSON layer.
+		 * @param {object} geoJson - GeoJSON object.
+		 * @param {object} [layerOptions] - options to be passed to the L.GeoJson constructor.
+		 * @returns {L.GeoJson}
+		 */
+		function createGeoJsonLayer(geoJson, layerOptions) {
+			return L.geoJson(geoJson, layerOptions || {
+				pointToLayer: performDefaultMarkerCreation,
+				onEachFeature: performDefaultPerFeatureTasks
+			});
+		}
+
+
+		/** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
+		 * @param {string} taskUrl - The location of the task JavaScript file.
+		 * @param {string} layerName - The name that will be given to the layer when it is added to the layer list control.
+		 * @param {string} apiType - Indicates which API endpoint will be queried.
+		 * @param {number} ticks - The refresh rate in milliseconds.
+		 * @param {Object} [layerOptions] - options to be passed to the L.GeoJson constructor.
+		 * @returns {Worker}
+		 */
+		function createWorker(taskUrl, layerName, apiType, ticks, layerOptions) {
 			var layer, worker;
 			worker = new Worker(taskUrl);
 
-			function pointToLayer(feature, latLng) {
-				return L.marker(latLng);
-			}
 
-			function onEachFeature(feature, layer) {
-				layer.bindPopup(createPopupContent(feature));
-			}
-
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer,
-					onEachFeature: onEachFeature
-				});
-			}
 
 			worker.addEventListener("message", function (oEvent) {
 				var geoJson = oEvent.data;
@@ -379,7 +394,7 @@ if (!window.Worker) {
 					}
 					else {
 						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
+						layer.addLayer(createGeoJsonLayer(geoJson, layerOptions));
 					}
 
 				}
