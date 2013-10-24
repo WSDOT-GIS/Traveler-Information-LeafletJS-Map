@@ -1,6 +1,8 @@
-﻿/*global define, module*/
+﻿/*global define, module, exports*/
+/*jslint white:true*/
 
 (function (root, factory) {
+	"use strict";
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(factory);
@@ -14,7 +16,7 @@
 		root.WsdotTraffic = factory();
 	}
 }(this, function () {
-
+	"use strict";
 	/** Returns null if input is null or undefined. Otherwise returns the input 
 	 * converted to a number via Number function (or if it was already a number
 	 * then the original number is returned.
@@ -101,7 +103,7 @@
 	 * @returns {GetIdOutput}
 	 */
 	function getId(/**{object}*/ properties) {
-		var re, name, value, output;
+		var re, name, output;
 
 		if (typeof properties === "object") {
 			re = /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
@@ -453,10 +455,10 @@
 	 * @returns {FeatureCollection}
 	 */
 	function toFeatureCollection(/**{Array}*/ a) {
-		var output;
+		var output, i, l;
 		if (a) {
 			output = [];
-			for (var i = 0, l = a.length; i < l; i += 1) {
+			for (i = 0, l = a.length; i < l; i += 1) {
 				output.push(toGeoJson(a[i]));
 			}
 		}
@@ -479,7 +481,7 @@
 			else if (obj instanceof BorderCrossingData) {
 				output = new Feature(new Geometry("Point", obj.BorderCrossingLocation.toGeoJsonPoint()), obj);
 			} else if (obj instanceof CVRestrictionData || obj instanceof PassCondition) {
-				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]));
+				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]), obj);
 			} else if (obj instanceof Camera) {
 				// Camera objects have two sets of coordinates available. If the CameraLocation is not valid, use DisplayLongitude, DisplayLatitude instead.
 				output = new Feature(new Geometry("Point", obj.CameraLocation.isLocationValid() ? [obj.CameraLocation.Longitude, obj.CameraLocation.Latitude] : [obj.DisplayLongitude, obj.DisplayLatitude]), obj);
