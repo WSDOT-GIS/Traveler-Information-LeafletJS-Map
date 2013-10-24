@@ -1,4 +1,4 @@
-﻿/*global onmessage, postMessage, setInterval, importScripts, wsdot*/
+﻿/*global postMessage, setInterval, importScripts, WsdotTraffic*/
 (function () {
 	"use strict";
 
@@ -19,10 +19,9 @@
 		return webRequest;
 	}
 
-	// Setup the task's "onmessage" event.
-	onmessage = function (/*event*/) {
+	addEventListener("message", function (/*event*/) {
 		var intervalId;
 		sendRequest();
 		intervalId = setInterval(sendRequest, 3600000);
-	};
+	});
 }());

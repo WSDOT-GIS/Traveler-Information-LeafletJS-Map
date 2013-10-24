@@ -25,9 +25,11 @@
 	 */
 	function getNumberOrNull(n) {
 		var output;
+		/*jshint eqnull:true*/
 		if (n == null) { // If null OR undefined. == instead of === is intentional.
 			output = null;
 		}
+		/*jshint eqnull:false*/
 		else if (typeof n === "number") {
 			output = n;
 		} else {
@@ -45,15 +47,15 @@
 		if (typeof value === "string") {
 			match = value.match(dateRe);
 			if (match) {
-				if (match.length >= 3) {
-					output = new Date(Number(match[2]) + Number(match[3]));
+				if (match.length === 3) {
+					output = new Date(Number(match[1]) + Number(match[2]));
 				} else {
 					output = new Date(Number(match[1]));
 				}
 			}
 		}
 
-		if (!output) {
+		if (!(output && output.getTime && !isNaN(output.getTime()))) {
 			output = value;
 		}
 		return output;
@@ -78,7 +80,7 @@
 		for (k in o) {
 			if (o.hasOwnProperty(k) && !(ignoredName && k === ignoredName)) {
 				v = o[k];
-				if (typeof v === "object") {
+				if (typeof v === "object" && !(v instanceof Date)) {
 					for (k2 in v) {
 						if (v.hasOwnProperty(k2)) {
 							output[[k, k2].join("_")] = v[k2];
@@ -352,7 +354,7 @@
 		/** @member {double} Longitude The longitude of the mountain pass. */
 		this.Longitude = json ? getNumberOrNull(json.Longitude) : null;
 		/** @member {DateTime} DateUpdated The time the PassCondition was updated. */
-		this.DateUpdated = json ? json.DateUpdated || null : null;
+		this.DateUpdated = json ? parseDate(json.DateUpdated) : null;
 		/** @member {int} TemperatureInFahrenheit The temperature reading at the mountain pass in degrees fahrenheit.	 */
 		this.TemperatureInFahrenheit = json ? json.TemperatureInFahrenheit || null : null;
 		/** @member {int} ElevationInFeet The elevation of the mountain pass in feet. */
@@ -506,12 +508,12 @@
 	/** A "reviver" function to use with the JSON.parse function that will create classes defined in this module where appropriate.
 	 */
 	function parseJson(/**{string}*/k, v) {
-		var output, constructor;
+		var output, Constructor;
 
 		if (v) {
-			constructor = determineConstructor(v);
-			if (constructor) {
-				output = new constructor(v);
+			Constructor = determineConstructor(v);
+			if (Constructor) {
+				output = new Constructor(v);
 			}
 			if (!output) {
 				output = v;
@@ -523,12 +525,12 @@
 	}
 
 	function parseAsGeoJson(/**{string}*/k, v) {
-		var output, constructor;
+		var output, Constructor;
 
 		if (v) {
-			constructor = determineConstructor(v);
-			if (constructor) {
-				output = new constructor(v);
+			Constructor = determineConstructor(v);
+			if (Constructor) {
+				output = new Constructor(v);
 				output = toGeoJson(output);
 			}
 			if (!output) {

@@ -438,7 +438,7 @@ if (!window.Worker) {
 
 		function setupPassConditionsWorker() {
 			var layer, worker;
-			worker = new Worker("Scripts/tasks/passconditions_task.js");
+			worker = new Worker("Scripts/tasks/passconditions_task.min.js");
 
 			function pointToLayer(feature, latLng) {
 				return L.marker(latLng);
@@ -457,8 +457,6 @@ if (!window.Worker) {
 
 			worker.addEventListener("message", function (oEvent) {
 				var geoJson = oEvent.data;
-
-				console.log(geoJson);
 
 				if (geoJson) {
 					if (!layer) {
