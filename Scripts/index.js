@@ -133,7 +133,7 @@ if (!window.Worker) {
 				}
 			}, false);
 
-			worker.postMessage("begin");
+			worker.postMessage("start");
 
 			return worker;
 		}
@@ -187,7 +187,7 @@ if (!window.Worker) {
 				}
 			}, false);
 
-			worker.postMessage("begin");
+			worker.postMessage("start");
 
 			return worker;
 		}
@@ -316,7 +316,7 @@ if (!window.Worker) {
 			}, false);
 
 			// Start the worker.  Presently, the content of text passed to the worker here does not matter.
-			worker.postMessage("begin");
+			worker.postMessage("start");
 
 			return worker;
 		}
@@ -350,51 +350,9 @@ if (!window.Worker) {
 		}
 
 
-		function setupCVRestrictionsWorker() {
+		function createWorker(taskUrl, layerName, apiType, ticks) {
 			var layer, worker;
-			worker = new Worker("Scripts/tasks/cvrestrictions_task.min.js");
-
-			function pointToLayer(feature, latLng) {
-				return L.marker(latLng, {
-					title: feature.properties.LocationDescription
-				});
-			}
-
-			function onEachFeature(feature, layer) {
-				layer.bindPopup(createPopupContent(feature));
-			}
-
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer,
-					onEachFeature: onEachFeature
-				});
-			}
-
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
-
-				if (geoJson) {
-					if (!layer) {
-						layer = createGeoJsonLayer(geoJson);
-						layerList.addOverlay(layer, "CV Restrictions");
-					}
-					else {
-						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-					}
-
-				}
-			}, false);
-
-			worker.postMessage("begin");
-
-			return worker;
-		}
-
-		function setupTravelTimesWorker() {
-			var layer, worker;
-			worker = new Worker("Scripts/tasks/traveltimes_task.min.js");
+			worker = new Worker(taskUrl);
 
 			function pointToLayer(feature, latLng) {
 				return L.marker(latLng);
@@ -417,7 +375,7 @@ if (!window.Worker) {
 				if (geoJson) {
 					if (!layer) {
 						layer = createGeoJsonLayer(geoJson);
-						layerList.addOverlay(layer, "Travel Times");
+						layerList.addOverlay(layer, layerName);
 					}
 					else {
 						layer.clearLayers();
@@ -431,51 +389,11 @@ if (!window.Worker) {
 				console.error("task error", e);
 			});
 
-			worker.postMessage("begin");
-
-			return worker;
-		}
-
-		function setupPassConditionsWorker() {
-			var layer, worker;
-			worker = new Worker("Scripts/tasks/passconditions_task.min.js");
-
-			function pointToLayer(feature, latLng) {
-				return L.marker(latLng);
-			}
-
-			function onEachFeature(feature, layer) {
-				layer.bindPopup(createPopupContent(feature));
-			}
-
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer,
-					onEachFeature: onEachFeature
-				});
-			}
-
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
-
-				if (geoJson) {
-					if (!layer) {
-						layer = createGeoJsonLayer(geoJson);
-						layerList.addOverlay(layer, "Pass Conditions");
-					}
-					else {
-						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-					}
-
-				}
-			}, false);
-
-			worker.addEventListener("error", function (/*{Error}*/ e) {
-				console.error("task error", e);
+			worker.postMessage({
+				action: "start",
+				type: apiType,
+				ticks: ticks
 			});
-
-			worker.postMessage("begin");
 
 			return worker;
 		}
@@ -483,8 +401,8 @@ if (!window.Worker) {
 		setupAlertsWorker();
 		setupTrafficFlowWorker();
 		setupCameraWorker();
-		setupCVRestrictionsWorker();
-		setupTravelTimesWorker();
-		setupPassConditionsWorker();
+		createWorker("Scripts/tasks/traffic_task.js", "Travel Times", "TravelTimes", 60000);
+		createWorker("Scripts/tasks/traffic_task.js", "CV Restrictions", "CVRestrictions", 86400000);
+		createWorker("Scripts/tasks/traffic_task.js", "Pass Conditions", "MountainPassConditions", 3600000);
 	});
 }
