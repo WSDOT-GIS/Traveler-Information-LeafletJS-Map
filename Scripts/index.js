@@ -321,7 +321,11 @@ if (!window.Worker) {
 			return worker;
 		}
 
-		function createPopupContent(feature) {
+		/** Creates generic popup content for a feature
+		 * @param {object} A GeoJSON feature.
+		 * @returns {HTMLTableElement}
+		 */
+		function performDefaultPopupContentCreation(feature) {
 			var table, row, cell, pName, v, nonZeroMeasureRe = /\w+(?:MaxAxle)|(?:In(?:(?:Inches)|(?:Pounds)))/i;
 
 			if (feature && feature.properties) {
@@ -349,12 +353,21 @@ if (!window.Worker) {
 			return table;
 		}
 
+		/** Creates a marker for a feature at the specified location.
+		 * @param {object} feature - A GeoJSON Feature object.
+		 * @param {L.LatLng} latLng
+		 * @returns {L.Marker}
+		 */
 		function performDefaultMarkerCreation(feature, latLng) {
 			return L.marker(latLng);
 		}
 
+		/** Binds a generic popup to a layer.
+		 * @param {object} feature - a GeoJSON feature
+		 * @param {L.Layer} layer
+		 */
 		function performDefaultPerFeatureTasks(feature, layer) {
-			layer.bindPopup(createPopupContent(feature));
+			layer.bindPopup(performDefaultPopupContentCreation(feature));
 		}
 
 		/** Creates a GeoJSON layer.
