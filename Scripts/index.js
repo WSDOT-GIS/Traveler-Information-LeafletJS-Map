@@ -1,5 +1,5 @@
 ﻿/*global Worker, require, requirejs*/
-/*jslint browser:true, regexp:true*/
+/*jslint browser:true, regexp:true, white:true*/
 
 
 requirejs.config({
@@ -20,7 +20,8 @@ if (!window.Worker) {
 } else {
 	require(["leaflet", "alertUtils", "markercluster"], function (L, alertUtils) {
 		"use strict";
-		var map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer, ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList;
+		var map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer,
+			ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList, signIcons;
 
 		// Define attribution strings that are common to multiple basemap layers.
 		osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
@@ -89,54 +90,7 @@ if (!window.Worker) {
 			"OpenCycleMap Outdoors": ocmOutdoorsLayer
 		}).addTo(map);
 
-
-
-
-
-
-		function setupAlertsWorker() {
-			var worker, layer, signIcons;
-			worker = new Worker("Scripts/tasks/alerts_task.min.js");
-			signIcons = new alertUtils.SignIcons();
-
-
-			function pointToLayer(feature, latLng) {
-				var icon;
-				icon = signIcons.GetIcon(feature);
-				return L.marker(latLng, { icon: icon });
-			}
-
-			function onEachFeature(feature, layer) {
-				layer.bindPopup(alertUtils.createAlertContent(feature));
-			}
-
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer,
-					onEachFeature: onEachFeature
-				});
-			}
-
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
-
-				if (geoJson) {
-					if (!layer) {
-						layer = createGeoJsonLayer(geoJson).addTo(map);
-						layerList.addOverlay(layer, "Alerts");
-					}
-					else {
-						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-					}
-
-				}
-			}, false);
-
-			worker.postMessage("start");
-
-			return worker;
-		}
+		signIcons = new alertUtils.SignIcons();
 
 		function setupTrafficFlowWorker() {
 			var layer, worker;
@@ -370,18 +324,6 @@ if (!window.Worker) {
 			layer.bindPopup(performDefaultPopupContentCreation(feature));
 		}
 
-		/** Creates a GeoJSON layer.
-		 * @param {object} geoJson - GeoJSON object.
-		 * @param {object} [layerOptions] - options to be passed to the L.GeoJson constructor.
-		 * @returns {L.GeoJson}
-		 */
-		function createGeoJsonLayer(geoJson, layerOptions) {
-			return L.geoJson(geoJson, layerOptions || {
-				pointToLayer: performDefaultMarkerCreation,
-				onEachFeature: performDefaultPerFeatureTasks
-			});
-		}
-
 
 		/** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
 		 * @param {string} taskUrl - The location of the task JavaScript file.
@@ -392,29 +334,34 @@ if (!window.Worker) {
 		 * @returns {Worker}
 		 */
 		function createWorker(taskUrl, layerName, apiType, ticks, layerOptions) {
-			var layer, worker;
+			var layer, worker, defaultLayerOptions;
 			worker = new Worker(taskUrl);
 
-
+			defaultLayerOptions = {
+				pointToLayer: performDefaultMarkerCreation,
+				onEachFeature: performDefaultPerFeatureTasks
+			};
 
 			worker.addEventListener("message", function (oEvent) {
 				var geoJson = oEvent.data;
 
 				if (geoJson) {
 					if (!layer) {
-						layer = createGeoJsonLayer(geoJson);
+						layer = L.geoJson(geoJson, layerOptions || defaultLayerOptions);
 						layerList.addOverlay(layer, layerName);
 					}
 					else {
 						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson, layerOptions));
+						layer.addLayer(L.geoJson(geoJson, layerOptions || defaultLayerOptions));
 					}
 
 				}
 			}, false);
 
 			worker.addEventListener("error", function (/*{Error}*/ e) {
-				console.error("task error", e);
+				if (window.console && window.console.error) {
+					window.console.error("task error", e);
+				}
 			});
 
 			worker.postMessage({
@@ -426,7 +373,20 @@ if (!window.Worker) {
 			return worker;
 		}
 
-		setupAlertsWorker();
+
+		// Setup alerts worker.
+		createWorker("Scripts/tasks/traffic_task.js", "Alerts", "HighwayAlerts", 60000, {
+			pointToLayer: function (feature, latLng) {
+				var icon;
+				icon = signIcons.GetIcon(feature);
+				return L.marker(latLng, { icon: icon });
+			},
+
+			onEachFeature: function (feature, layer) {
+				layer.bindPopup(alertUtils.createAlertContent(feature));
+			}
+		});
+
 		setupTrafficFlowWorker();
 		setupCameraWorker();
 		createWorker("Scripts/tasks/traffic_task.js", "Travel Times", "TravelTimes", 60000);
