@@ -375,7 +375,7 @@ if (!window.Worker) {
 
 
 		// Setup alerts worker.
-		createWorker("Scripts/tasks/traffic_task.js", "Alerts", "HighwayAlerts", 60000, {
+		createWorker("Scripts/tasks/traffic_task.min.js", "Alerts", "HighwayAlerts", 60000, {
 			pointToLayer: function (feature, latLng) {
 				var icon;
 				icon = signIcons.GetIcon(feature);
@@ -389,8 +389,8 @@ if (!window.Worker) {
 
 		setupTrafficFlowWorker();
 		setupCameraWorker();
-		createWorker("Scripts/tasks/traffic_task.js", "Travel Times", "TravelTimes", 60000);
-		createWorker("Scripts/tasks/traffic_task.js", "CV Restrictions", "CVRestrictions", 86400000);
-		createWorker("Scripts/tasks/traffic_task.js", "Pass Conditions", "MountainPassConditions", 3600000);
+		createWorker("Scripts/tasks/traffic_task.min.js", "Travel Times", "TravelTimes", 60000);
+		createWorker("Scripts/tasks/traffic_task.min.js", "CV Restrictions", "CVRestrictions", 86400000);
+		createWorker("Scripts/tasks/traffic_task.min.js", "Pass Conditions", "MountainPassConditions", 3600000);
 	});
 }
