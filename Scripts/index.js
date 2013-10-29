@@ -92,60 +92,6 @@ if (!window.Worker) {
 
 		signIcons = new alertUtils.SignIcons();
 
-		function setupTrafficFlowWorker() {
-			var layer, worker;
-			worker = new Worker("Scripts/tasks/trafficflow_task.min.js");
-
-			function valueToColor(value) {
-				return !value ? "white"
-					: value === 1 ? "#0f0"
-					: value === 2 ? "yellow"
-					: value === 3 ? "red"
-					: value === 4 ? "black"
-					: "gray";
-			}
-
-			function pointToLayer(feature, latLng) {
-				return L.circleMarker(latLng, {
-					radius: 5,
-					fillOpacity: 1,
-					color: "black",
-					fillColor: valueToColor(feature.properties.FlowReadingValue)
-				});
-			}
-
-			////function onEachFeature(feature, layer) {
-			////	layer.bindPopup(alertUtils.createAlertContent(feature));
-			////}
-
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer
-					////onEachFeature: onEachFeature
-				});
-			}
-
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
-
-				if (geoJson) {
-					if (!layer) {
-						layer = createGeoJsonLayer(geoJson);
-						layerList.addOverlay(layer, "Traffic Flow");
-					}
-					else {
-						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-					}
-
-				}
-			}, false);
-
-			worker.postMessage("start");
-
-			return worker;
-		}
-
 		function setupCameraWorker() {
 			var layer, worker, cameraIcon;
 			worker = new Worker("Scripts/tasks/cameras_task.min.js");
@@ -373,6 +319,7 @@ if (!window.Worker) {
 			return worker;
 		}
 
+		// Setup the WebWorkers...
 
 		// Setup alerts worker.
 		createWorker("Scripts/tasks/traffic_task.min.js", "Alerts", "HighwayAlerts", 60000, {
@@ -387,7 +334,33 @@ if (!window.Worker) {
 			}
 		});
 
-		setupTrafficFlowWorker();
+		// traffic flow...
+
+		function valueToColor(value) {
+			return !value ? "white"
+				: value === 1 ? "#0f0"
+				: value === 2 ? "yellow"
+				: value === 3 ? "red"
+				: value === 4 ? "black"
+				: "gray";
+		}
+
+		createWorker("Scripts/tasks/trafficflow_task.min.js", "Traffic Flow", "TrafficFlow", 60000, {
+			pointToLayer: function(feature, latLng) {
+				return L.circleMarker(latLng, {
+					radius: 5,
+					fillOpacity: 1,
+					color: "black",
+					fillColor: valueToColor(feature.properties.FlowReadingValue)
+				});
+			}
+		});
+
+
+
+
+
+
 		setupCameraWorker();
 		createWorker("Scripts/tasks/traffic_task.min.js", "Travel Times", "TravelTimes", 60000);
 		createWorker("Scripts/tasks/traffic_task.min.js", "CV Restrictions", "CVRestrictions", 86400000);
