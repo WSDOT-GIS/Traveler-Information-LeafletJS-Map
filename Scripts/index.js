@@ -272,16 +272,16 @@ if (!window.Worker) {
 
 
 		/** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
-		 * @param {string} taskUrl - The location of the task JavaScript file.
 		 * @param {string} layerName - The name that will be given to the layer when it is added to the layer list control.
 		 * @param {string} apiType - Indicates which API endpoint will be queried.
 		 * @param {number} ticks - The refresh rate in milliseconds.
 		 * @param {Object} [layerOptions] - options to be passed to the L.GeoJson constructor.
+		 * @param {string} [taskUrl="Scripts/tasks/traffic_task.min.js"] - The location of the task JavaScript file.
 		 * @returns {Worker}
 		 */
-		function createWorker(taskUrl, layerName, apiType, ticks, layerOptions) {
+		function createWorker(layerName, apiType, ticks, layerOptions, taskUrl) {
 			var layer, worker, defaultLayerOptions;
-			worker = new Worker(taskUrl);
+			worker = new Worker(taskUrl || "Scripts/tasks/traffic_task.min.js");
 
 			defaultLayerOptions = {
 				pointToLayer: performDefaultMarkerCreation,
@@ -322,7 +322,7 @@ if (!window.Worker) {
 		// Setup the WebWorkers...
 
 		// Setup alerts worker.
-		createWorker("Scripts/tasks/traffic_task.min.js", "Alerts", "HighwayAlerts", 60000, {
+		createWorker("Alerts", "HighwayAlerts", 60000, {
 			pointToLayer: function (feature, latLng) {
 				var icon;
 				icon = signIcons.GetIcon(feature);
@@ -345,7 +345,7 @@ if (!window.Worker) {
 				: "gray";
 		}
 
-		createWorker("Scripts/tasks/trafficflow_task.min.js", "Traffic Flow", "TrafficFlow", 60000, {
+		createWorker("Traffic Flow", "TrafficFlow", 60000, {
 			pointToLayer: function(feature, latLng) {
 				return L.circleMarker(latLng, {
 					radius: 5,
@@ -354,7 +354,7 @@ if (!window.Worker) {
 					fillColor: valueToColor(feature.properties.FlowReadingValue)
 				});
 			}
-		});
+		}, "Scripts/tasks/trafficflow_task.min.js");
 
 
 
@@ -362,8 +362,8 @@ if (!window.Worker) {
 
 
 		setupCameraWorker();
-		createWorker("Scripts/tasks/traffic_task.min.js", "Travel Times", "TravelTimes", 60000);
-		createWorker("Scripts/tasks/traffic_task.min.js", "CV Restrictions", "CVRestrictions", 86400000);
-		createWorker("Scripts/tasks/traffic_task.min.js", "Pass Conditions", "MountainPassConditions", 3600000);
+		createWorker("Travel Times", "TravelTimes", 60000);
+		createWorker("CV Restrictions", "CVRestrictions", 86400000);
+		createWorker("Pass Conditions", "MountainPassConditions", 3600000);
 	});
 }
