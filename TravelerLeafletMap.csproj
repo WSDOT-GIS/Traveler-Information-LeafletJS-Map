@@ -63,11 +63,7 @@
     <Content Include="images\icons\camera.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
-    <Content Include="Scripts\tasks\alerts_task.js" />
     <Content Include="Scripts\alertUtils.js" />
-    <Content Include="Scripts\tasks\alerts_task.min.js">
-      <DependentUpon>alerts_task.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\tasks\cameras_task.js" />
     <Content Include="Scripts\tasks\cameras_task.min.js">
       <DependentUpon>cameras_task.js</DependentUpon>
@@ -121,9 +117,6 @@
     </Content>
     <Content Include="Scripts\WsdotTraffic.min.js.map">
       <DependentUpon>WsdotTraffic.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\alerts_task.min.js.map">
-      <DependentUpon>alerts_task.js</DependentUpon>
     </Content>
     <Content Include="Scripts\tasks\cameras_task.min.js.map">
       <DependentUpon>cameras_task.js</DependentUpon>
