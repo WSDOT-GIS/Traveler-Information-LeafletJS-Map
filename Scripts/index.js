@@ -94,7 +94,7 @@ if (!window.Worker) {
 
 		function setupCameraWorker() {
 			var layer, worker, cameraIcon;
-			worker = new Worker("Scripts/tasks/cameras_task.min.js");
+			worker = new Worker("Scripts/tasks/traffic_task.min.js");
 
 			/** Creates the popup content for a camera feature.
 			 * @returns Element
@@ -216,7 +216,11 @@ if (!window.Worker) {
 			}, false);
 
 			// Start the worker.  Presently, the content of text passed to the worker here does not matter.
-			worker.postMessage("start");
+			worker.postMessage({
+				action: "start",
+				type: "HighwayCameras",
+				ticks: 86400000
+			});
 
 			return worker;
 		}
@@ -321,18 +325,6 @@ if (!window.Worker) {
 
 		// Setup the WebWorkers...
 
-		// Setup alerts worker.
-		createWorker("Alerts", "HighwayAlerts", 60000, {
-			pointToLayer: function (feature, latLng) {
-				var icon;
-				icon = signIcons.GetIcon(feature);
-				return L.marker(latLng, { icon: icon });
-			},
-
-			onEachFeature: function (feature, layer) {
-				layer.bindPopup(alertUtils.createAlertContent(feature));
-			}
-		});
 
 		// traffic flow...
 
@@ -345,6 +337,21 @@ if (!window.Worker) {
 				: "gray";
 		}
 
+
+		setupCameraWorker();
+
+		// Setup alerts worker.
+		createWorker("Alerts", "HighwayAlerts", 60000, {
+			pointToLayer: function (feature, latLng) {
+				var icon;
+				icon = signIcons.GetIcon(feature);
+				return L.marker(latLng, { icon: icon });
+			},
+
+			onEachFeature: function (feature, layer) {
+				layer.bindPopup(alertUtils.createAlertContent(feature));
+			}
+		});
 		createWorker("Traffic Flow", "TrafficFlow", 60000, {
 			pointToLayer: function(feature, latLng) {
 				return L.circleMarker(latLng, {
@@ -356,8 +363,6 @@ if (!window.Worker) {
 			},
 			onEachFeature: performDefaultPerFeatureTasks
 		});
-
-		setupCameraWorker();
 		createWorker("Travel Times", "TravelTimes", 60000);
 		createWorker("CV Restrictions", "CVRestrictions", 86400000);
 		createWorker("Border Crossings", "BorderCrossings", 86400000);

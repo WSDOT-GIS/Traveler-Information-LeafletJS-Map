@@ -64,10 +64,6 @@
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\alertUtils.js" />
-    <Content Include="Scripts\tasks\cameras_task.js" />
-    <Content Include="Scripts\tasks\cameras_task.min.js">
-      <DependentUpon>cameras_task.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\index.min.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
@@ -113,9 +109,6 @@
     </Content>
     <Content Include="Scripts\WsdotTraffic.min.js.map">
       <DependentUpon>WsdotTraffic.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\cameras_task.min.js.map">
-      <DependentUpon>cameras_task.js</DependentUpon>
     </Content>
     <Content Include="Scripts\tasks\task_common.min.js.map">
       <DependentUpon>task_common.js</DependentUpon>
