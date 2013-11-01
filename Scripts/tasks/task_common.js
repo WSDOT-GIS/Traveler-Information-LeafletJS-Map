@@ -108,6 +108,11 @@ if (!wsdot) {
 				type: "Point",
 				coordinates: toPosition(alert.EndRoadwayLocation)
 			};
+		} else if (alert.FlowStationLocation) {
+			output = {
+				type: "Point",
+				coordinates: toPosition(alert.FlowStationLocation)
+			};
 		} else {
 			output = getPositionFromObject(alert);
 			output = output ? {

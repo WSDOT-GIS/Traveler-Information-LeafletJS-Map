@@ -76,13 +76,9 @@
     <Content Include="Scripts\tasks\task_common.min.js">
       <DependentUpon>task_common.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\tasks\trafficflow_task.min.js">
-      <DependentUpon>trafficflow_task.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\tasks\traffic_task.min.js">
       <DependentUpon>traffic_task.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\tasks\trafficflow_task.js" />
     <Content Include="Scripts\index.js" />
   </ItemGroup>
   <ItemGroup />
@@ -123,9 +119,6 @@
     </Content>
     <Content Include="Scripts\tasks\task_common.min.js.map">
       <DependentUpon>task_common.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\trafficflow_task.min.js.map">
-      <DependentUpon>trafficflow_task.js</DependentUpon>
     </Content>
     <Content Include="Scripts\tasks\traffic_task.min.js.map">
       <DependentUpon>traffic_task.js</DependentUpon>

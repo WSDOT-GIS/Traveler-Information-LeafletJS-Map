@@ -337,11 +337,11 @@ if (!window.Worker) {
 		// traffic flow...
 
 		function valueToColor(value) {
-			return !value ? "white"
-				: value === 1 ? "#0f0"
-				: value === 2 ? "yellow"
-				: value === 3 ? "red"
-				: value === 4 ? "black"
+			return !value || value === "Unknown" ? "white"
+				: value === 1 || value === "WideOpen" ? "#0f0"
+				: value === 2 || value === "Moderate" ? "yellow"
+				: value === 3 || value === "Heavy" ? "red"
+				: value === 4 || value === "StopAndGo" ? "black"
 				: "gray";
 		}
 
@@ -353,17 +353,14 @@ if (!window.Worker) {
 					color: "black",
 					fillColor: valueToColor(feature.properties.FlowReadingValue)
 				});
-			}
-		}, "Scripts/tasks/trafficflow_task.min.js");
-
-
-
-
-
+			},
+			onEachFeature: performDefaultPerFeatureTasks
+		});
 
 		setupCameraWorker();
 		createWorker("Travel Times", "TravelTimes", 60000);
 		createWorker("CV Restrictions", "CVRestrictions", 86400000);
+		createWorker("Border Crossings", "BorderCrossings", 86400000);
 		createWorker("Pass Conditions", "MountainPassConditions", 3600000);
 	});
 }

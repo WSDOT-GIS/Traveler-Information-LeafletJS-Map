@@ -481,14 +481,14 @@
 				output = toFeatureCollection(obj);
 			}
 			else if (obj instanceof BorderCrossingData) {
-				output = new Feature(new Geometry("Point", obj.BorderCrossingLocation.toGeoJsonPoint()), obj);
+				output = new Feature(obj.BorderCrossingLocation.toGeoJsonPoint(), obj);
 			} else if (obj instanceof CVRestrictionData || obj instanceof PassCondition) {
 				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]), obj);
 			} else if (obj instanceof Camera) {
 				// Camera objects have two sets of coordinates available. If the CameraLocation is not valid, use DisplayLongitude, DisplayLatitude instead.
 				output = new Feature(new Geometry("Point", obj.CameraLocation.isLocationValid() ? [obj.CameraLocation.Longitude, obj.CameraLocation.Latitude] : [obj.DisplayLongitude, obj.DisplayLatitude]), obj);
 			} else if (obj instanceof FlowData) {
-				output = new Feature(new Geometry("Point", obj.FlowStationLocation.toGeoJsonPoint()), obj);
+				output = new Feature(obj.FlowStationLocation.toGeoJsonPoint(), obj);
 			} else if (obj instanceof TravelTimeRoute) {
 				output = new Feature(new Geometry("MultiPoint", [
 					[obj.StartPoint.Longitude, obj.StartPoint.Latitude],
