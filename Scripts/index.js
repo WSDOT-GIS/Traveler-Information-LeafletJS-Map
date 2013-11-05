@@ -365,10 +365,17 @@ if (!window.Worker) {
 		});
 		createWorker("Travel Times", "TravelTimes", 60000, {
 			pointToLayer: function (feature, latLng) {
+				var additionalClass = feature.properties.CurrentTime < feature.properties.AverageTime ? "below-average"
+					: feature.properties.CurrentTime > feature.properties.AverageTime ? "above-average"
+					: null;
+				var className = "travel-times-icon";
+				if (additionalClass) {
+					className = [className, additionalClass].join(" ");
+				}
 				return L.marker(latLng, {
 					icon: L.divIcon({
-						className: "travel-times-icon",
-						html: "<div>" + String(feature.properties.CurrentTime) + "</div>"
+						className: className,
+						html: "<div>" + String(feature.properties.CurrentTime) + "&rsquo;</div>"
 					})
 				});
 			},
