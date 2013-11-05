@@ -6,3 +6,12 @@
 .leaflet-popup-content table {
 	font-size: xx-small;
 }
+
+.travel-times-icon {
+	background-color: white;
+	border: 1px solid black;
+	font-size: 1em;
+	font-family: Impact,  Haettenschweiler,  'Arial Narrow Bold',  sans-serif;
+	text-align: center;
+	padding: 0.1em 0.2em 0.5em 0.1em;
+}

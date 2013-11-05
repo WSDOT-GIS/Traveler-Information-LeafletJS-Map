@@ -363,7 +363,17 @@ if (!window.Worker) {
 			},
 			onEachFeature: performDefaultPerFeatureTasks
 		});
-		createWorker("Travel Times", "TravelTimes", 60000);
+		createWorker("Travel Times", "TravelTimes", 60000, {
+			pointToLayer: function (feature, latLng) {
+				return L.marker(latLng, {
+					icon: L.divIcon({
+						className: "travel-times-icon",
+						html: "<div>" + String(feature.properties.CurrentTime) + "</div>"
+					})
+				});
+			},
+			onEachFeature: performDefaultPerFeatureTasks
+		});
 		createWorker("CV Restrictions", "CVRestrictions", 86400000);
 		createWorker("Border Crossings", "BorderCrossings", 86400000);
 		createWorker("Pass Conditions", "MountainPassConditions", 3600000);
