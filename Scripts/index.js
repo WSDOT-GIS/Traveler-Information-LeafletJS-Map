@@ -381,8 +381,19 @@ if (!window.Worker) {
 			},
 			onEachFeature: performDefaultPerFeatureTasks
 		});
+		createWorker("Border Crossings", "BorderCrossings", 86400000, {
+			pointToLayer: function (feature, latLng) {
+				var className = "border-crossings-icon";
+				return L.marker(latLng, {
+					icon: L.divIcon({
+						className: className,
+						html: "<div>" + String(feature.properties.WaitTime) + "&rsquo;</div>"
+					})
+				});
+			},
+			onEachFeature: performDefaultPerFeatureTasks
+		});
 		createWorker("CV Restrictions", "CVRestrictions", 86400000);
-		createWorker("Border Crossings", "BorderCrossings", 86400000);
 		createWorker("Pass Conditions", "MountainPassConditions", 3600000);
 	});
 }

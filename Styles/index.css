@@ -7,7 +7,7 @@
 	font-size: xx-small;
 }
 
-.travel-times-icon {
+.border-crossings-icon, .travel-times-icon {
 	background-color: white;
 	border: 1px solid black;
 	font-size: 1em;
