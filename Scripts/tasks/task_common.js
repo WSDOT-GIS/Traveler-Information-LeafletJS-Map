@@ -3,7 +3,6 @@ if (!wsdot) {
 	var wsdot = {};
 }
 
-
 (function () {
 	"use strict";
 

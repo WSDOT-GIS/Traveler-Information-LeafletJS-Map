@@ -34,7 +34,7 @@
 	 */
 
 	function startRequests(/** {RequestData} */ requestData) {
-		url = "../../proxy.ashx?type=" + requestData.type;
+		url = "../../api/traffic/" + requestData.type;
 		ticks = requestData.ticks;
 		sendRequest();
 		intervalId = setInterval(sendRequest, ticks);

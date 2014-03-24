@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TravelerLeafletMap</RootNamespace>
     <AssemblyName>TravelerLeafletMap</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,12 +38,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Global.asax" />
     <Content Include="images\icons\alert\AccidentAlert1.png" />
     <Content Include="images\icons\alert\AccidentAlert2.png" />
     <Content Include="images\icons\alert\AccidentAlert3.png" />
@@ -78,15 +81,31 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.WebHost.5.1.1\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -94,29 +113,29 @@
   <ItemGroup>
     <Content Include="Scripts\tasks\task_common.js" />
     <Content Include="Scripts\WsdotTraffic.js" />
+    <Content Include="Scripts\WsdotTraffic.min.js.map">
+      <DependentUpon>WsdotTraffic.min.js</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="Scripts\_references.js" />
     <Content Include="Scripts\WsdotTraffic.min.js">
       <DependentUpon>WsdotTraffic.js</DependentUpon>
     </Content>
-    <None Include="Scripts\_references.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
       <DependentUpon>index.css</DependentUpon>
     </Content>
     <Content Include="Web.config" />
     <Content Include="README.md" />
-    <Content Include="proxy.ashx" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Scripts\index.min.js.map">
       <DependentUpon>index.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\WsdotTraffic.min.js.map">
-      <DependentUpon>WsdotTraffic.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\tasks\task_common.min.js.map">
-      <DependentUpon>task_common.js</DependentUpon>
+      <DependentUpon>task_common.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\tasks\traffic_task.min.js.map">
-      <DependentUpon>traffic_task.js</DependentUpon>
+      <DependentUpon>traffic_task.min.js</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -126,8 +145,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="proxy.ashx.cs">
-      <DependentUpon>proxy.ashx</DependentUpon>
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TrafficController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
