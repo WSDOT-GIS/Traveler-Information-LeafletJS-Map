@@ -1,11 +1,25 @@
 ﻿/*global Worker, require, requirejs*/
 /*jslint browser:true, regexp:true, white:true*/
 
+/**
+ * @external LeafletEvent
+ * @see {@link http://leafletjs.com/reference.html#event-objects}
+ */
+
+/**
+ * @external Popup
+ * @see {@link http://leafletjs.com/reference.html#popup}
+ */
+
+/**
+ * @external GeoJson
+ * @see {@link http://leafletjs.com/reference.html#geojson}
+ */
 
 requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
-		leaflet: "//cdn.leafletjs.com/leaflet-0.6.4/leaflet",
+		leaflet: "//cdn.leafletjs.com/leaflet-0.7.2/leaflet",
 		markercluster: "Leaflet.markercluster/dist/leaflet.markercluster"
 	},
 	// This shim property makes sure that leaflet is loaded before markercluster.
@@ -129,14 +143,23 @@ if (!window.Worker) {
 
 			}
 
+			/**
+			 * 
+			 * @typedef {Object.<string, (string|?number)>} CameraProperties
+			 * @property {string} ImageURL
+			 * @property {?number} ImageWidth
+			 * @property {?number} ImageHeight
+			 * @property {string} Description
+			 * @property {string} Title
+			 */
 
 			/** Adds the camera image element to a camera popup.
-			 * @param popupEvent
-			 * @param popupEvent.popup
+			 * @param {LeafletEvent} popupEvent
+			 * @param {Popup} popupEvent.popup
 			 * @param {HTMLElement} popupEvent.popup._content
-			 * @param popupEvent.target
-			 * @param popupEvent.target.feature GeoJSON feature that was clicked.
-			 * @param popupEvent.target.feature.properties The properties of the feature that was clicked.
+			 * @param {string} popupEvent.target
+			 * @param {GeoJson} popupEvent.target.feature GeoJSON feature that was clicked.
+			 * @param {CameraProperties} popupEvent.target.feature.properties The properties of the feature that was clicked.
 			 */
 			function addImgElement(popupEvent) {
 				/*jslint nomen:true*/
@@ -171,7 +194,6 @@ if (!window.Worker) {
 
 			}
 
-
 			/** Adds a popup to the feature.
 			 */
 			function onEachFeature(feature, layer) {
@@ -180,7 +202,7 @@ if (!window.Worker) {
 			}
 
 			/** Creates a GeoJSON layer.
-			 * @param {Object} geoJSON
+			 * @param {Object} geoJson
 			 * @returns {L.GeoJson}
 			*/
 			function createGeoJsonLayer(geoJson) {
@@ -206,8 +228,7 @@ if (!window.Worker) {
 						layer.addLayer(createGeoJsonLayer(geoJson));
 						// Add this layer to the layer list.
 						layerList.addOverlay(layer, "Cameras");
-					}
-					else {
+					} else {
 						layer.clearLayers();
 						layer.addLayer(createGeoJsonLayer(geoJson));
 					}
@@ -226,7 +247,7 @@ if (!window.Worker) {
 		}
 
 		/** Creates generic popup content for a feature
-		 * @param {object} A GeoJSON feature.
+		 * @param {object} feature - A GeoJSON feature.
 		 * @returns {HTMLTableElement}
 		 */
 		function performDefaultPopupContentCreation(feature) {
@@ -274,7 +295,6 @@ if (!window.Worker) {
 			layer.bindPopup(performDefaultPopupContentCreation(feature));
 		}
 
-
 		/** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
 		 * @param {string} layerName - The name that will be given to the layer when it is added to the layer list control.
 		 * @param {string} apiType - Indicates which API endpoint will be queried.
@@ -299,8 +319,7 @@ if (!window.Worker) {
 					if (!layer) {
 						layer = L.geoJson(geoJson, layerOptions || defaultLayerOptions);
 						layerList.addOverlay(layer, layerName);
-					}
-					else {
+					} else {
 						layer.clearLayers();
 						layer.addLayer(L.geoJson(geoJson, layerOptions || defaultLayerOptions));
 					}
@@ -325,7 +344,6 @@ if (!window.Worker) {
 
 		// Setup the WebWorkers...
 
-
 		// traffic flow...
 
 		function valueToColor(value) {
@@ -336,7 +354,6 @@ if (!window.Worker) {
 				: value === 4 || value === "StopAndGo" ? "black"
 				: "gray";
 		}
-
 
 		setupCameraWorker();
 

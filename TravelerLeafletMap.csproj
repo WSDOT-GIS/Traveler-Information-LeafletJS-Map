@@ -64,7 +64,9 @@
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\alertUtils.js" />
-    <Content Include="Scripts\index.min.js" />
+    <Content Include="Scripts\index.min.js">
+      <DependentUpon>index.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
     <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
@@ -106,7 +108,7 @@
     <Content Include="proxy.ashx" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Scripts\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
+      <DependentUpon>index.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\WsdotTraffic.min.js.map">
       <DependentUpon>WsdotTraffic.js</DependentUpon>

@@ -1,4 +1,4 @@
-﻿/*global require, exports*/
+﻿/*global define*/
 /*jslint browser:true*/
 
 define(["leaflet"], function (L) {
