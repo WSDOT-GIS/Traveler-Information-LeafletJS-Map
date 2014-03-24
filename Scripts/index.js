@@ -20,7 +20,7 @@ requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
 		leaflet: "//cdn.leafletjs.com/leaflet-0.7.2/leaflet",
-		markercluster: "Leaflet.markercluster/dist/leaflet.markercluster"
+		markercluster: "//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster"
 	},
 	// This shim property makes sure that leaflet is loaded before markercluster.
 	shim: {

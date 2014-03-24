@@ -67,9 +67,6 @@
     <Content Include="Scripts\index.min.js">
       <DependentUpon>index.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\Leaflet.markercluster\dist\leaflet.markercluster.js" />
-    <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.css" />
-    <Content Include="Scripts\Leaflet.markercluster\dist\MarkerCluster.Default.css" />
     <Content Include="Scripts\tasks\traffic_task.js" />
     <Content Include="Scripts\tasks\task_common.min.js">
       <DependentUpon>task_common.js</DependentUpon>

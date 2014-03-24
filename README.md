@@ -22,7 +22,7 @@ If you want to use a different environment, you may need to write your own versi
 * [WSDOT Traveler Info Icons] \(via git submodule\)
 * [RequireJS] \(via [cdnjs]\)
 * [LeafletJS] \(via [cdnjs]\)
-* [Leaflet.markercluster] \(via git submodule\)
+* [Leaflet.markercluster] \(via [cdnjs]\)
 
 [cdnjs]://cdnjs.com/
 [Set up Git]:https://help.github.com/articles/set-up-git
