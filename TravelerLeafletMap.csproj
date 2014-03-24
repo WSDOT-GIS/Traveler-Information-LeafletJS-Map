@@ -94,7 +94,9 @@
   <ItemGroup>
     <Content Include="Scripts\tasks\task_common.js" />
     <Content Include="Scripts\WsdotTraffic.js" />
-    <Content Include="Scripts\WsdotTraffic.min.js" />
+    <Content Include="Scripts\WsdotTraffic.min.js">
+      <DependentUpon>WsdotTraffic.js</DependentUpon>
+    </Content>
     <None Include="Scripts\_references.js" />
     <Content Include="Styles\index.css" />
     <Content Include="Styles\index.min.css">
@@ -108,7 +110,7 @@
       <DependentUpon>index.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\WsdotTraffic.min.js.map">
-      <DependentUpon>WsdotTraffic.js</DependentUpon>
+      <DependentUpon>WsdotTraffic.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\tasks\task_common.min.js.map">
       <DependentUpon>task_common.js</DependentUpon>

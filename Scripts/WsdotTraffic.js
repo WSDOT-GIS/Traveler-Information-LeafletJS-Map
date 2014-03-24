@@ -20,7 +20,7 @@
 	/** Returns null if input is null or undefined. Otherwise returns the input 
 	 * converted to a number via Number function (or if it was already a number
 	 * then the original number is returned.
-	 * @param n
+	 * @param {*} n
 	 * @output {(Number|null)}
 	 */
 	function getNumberOrNull(n) {
@@ -28,9 +28,8 @@
 		/*jshint eqnull:true*/
 		if (n == null) { // If null OR undefined. == instead of === is intentional.
 			output = null;
-		}
 		/*jshint eqnull:false*/
-		else if (typeof n === "number") {
+		} else if (typeof n === "number") {
 			output = n;
 		} else {
 			output = Number(n);
@@ -267,8 +266,6 @@
 	CVRestrictionData.RESTRICTION_TYPE_BRIDGE_RESTRICTION = "BridgeRestriction";
 	CVRestrictionData.RESTRICTION_TYPE_ROAD_RESTRICTION = "RoadRestriction";
 
-
-
 	/** A Highway Alert 
 	 * @constructor
 	 */
@@ -479,8 +476,7 @@
 				output = obj.toFeature();
 			} else if (obj instanceof Array) {
 				output = toFeatureCollection(obj);
-			}
-			else if (obj instanceof BorderCrossingData) {
+			} else if (obj instanceof BorderCrossingData) {
 				output = new Feature(obj.BorderCrossingLocation.toGeoJsonPoint(), obj);
 			} else if (obj instanceof CVRestrictionData || obj instanceof PassCondition) {
 				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]), obj);
