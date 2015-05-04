@@ -233,6 +233,19 @@ define(["leaflet"], function (L) {
 		return icon;
 	};
 
+	function createParagraphs(s) {
+		var frag;
+		if (s) {
+			frag = document.createDocumentFragment();
+			s = s.split(/\n/ig).forEach(function (part) {
+				var p = document.createElement("p");
+				p.textContent = replaceUrlsWithLinks(part);
+				frag.appendChild(p);
+			});
+		}
+		return frag;
+	}
+
 	return {
 		categories: categories,
 		priorities: priorities,
@@ -241,7 +254,7 @@ define(["leaflet"], function (L) {
 		 * @returns {HTMLDivElement}
 		 */
 		createAlertContent: function (feature) {
-			var name, frag, table, row, cell, p;
+			var name, frag, table, row, cell, section;
 			frag = document.createElement("div");
 			table = document.createElement("table");
 			for (name in feature.properties) {
@@ -259,16 +272,16 @@ define(["leaflet"], function (L) {
 				}
 			}
 
-			p = document.createElement("p");
-			p.classList.add("headline-description");
-			p.textContent = feature.properties.HeadlineDescription;
-			frag.appendChild(p);
+			section = document.createElement("section");
+			section.classList.add("headline-description");
+			section.appendChild(createParagraphs(feature.properties.HeadlineDescription));
+			frag.appendChild(section);
 
 			if (feature.properties.ExtendedDescription) {
-				p = document.createElement("p");
-				p.classList.add("headline-description");
-				p.innerHTML = replaceUrlsWithLinks(feature.properties.ExtendedDescription);
-				frag.appendChild(p);
+				section = document.createElement("section");
+				section.classList.add("extended-description");
+				section.appendChild(createParagraphs(feature.properties.ExtendedDescription));
+				frag.appendChild(section);
 			}
 			frag.appendChild(table);
 
