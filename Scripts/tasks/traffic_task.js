@@ -4,7 +4,7 @@
 
 	var ticks, url, intervalId, handleWebRequestLoad;
 
-	importScripts("../WsdotTraffic.min.js");
+	importScripts("../WsdotTraffic.js");
 
 	/** Posts the data returned by the web request as a response message.
 	 * @this {XMLHttpRequest}

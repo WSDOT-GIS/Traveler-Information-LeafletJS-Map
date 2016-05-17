@@ -17,7 +17,7 @@
 	}
 }(this, function () {
 	"use strict";
-	/** Returns null if input is null or undefined. Otherwise returns the input 
+	/** Returns null if input is null or undefined. Otherwise returns the input
 	 * converted to a number via Number function (or if it was already a number
 	 * then the original number is returned.
 	 * @param {*} n
@@ -38,7 +38,7 @@
 		return output;
 	}
 
-	/** Converts a .NET formatted date string into a Date if possible. 
+	/** Converts a .NET formatted date string into a Date if possible.
 	 * If not possible or if input is not a string, the input is returned.
 	 */
 	function parseDate(value) {
@@ -60,7 +60,7 @@
 		return output;
 	}
 
-	/** Represents a GeoJSON Geometry 
+	/** Represents a GeoJSON Geometry
 	 * @constructor
 	 * @param {string} type Valid values: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon
 	 * @param {(Number[]|Array.<Array.<Number>>|Array.<Array.<Array<Number>>>|Array.<Array.<Array.<Array.<Number>>>)} coordinates The coordinates that define the geometry.
@@ -121,7 +121,7 @@
 		return output;
 	}
 
-	/** Represents a GeoJSON Feature 
+	/** Represents a GeoJSON Feature
 	 * @constructor
 	 */
 	function Feature(/** {Geometry} */ geometry, /**{object}*/ properties) {
@@ -157,7 +157,7 @@
 		this.Longitude = json ? getNumberOrNull(json.Longitude) : null;
 	}
 
-	/** Determines if the longitude and latitude properties are valid. 
+	/** Determines if the longitude and latitude properties are valid.
 	 * Currently only checks to make sure they are both "truthy" (i.e., non-zero, non-null, non-undefined).
 	 * @returns {Boolean}
 	 */
@@ -184,7 +184,7 @@
 		return output;
 	};
 
-	/** Represents a border crossing 
+	/** Represents a border crossing
 	 * @constructor
 	 */
 	function BorderCrossingData(json) {
@@ -198,7 +198,7 @@
 		this.WaitTime = json ? json.WaitTime || null : null;
 	}
 
-	/** Represents a Commercial Vehicle Restriction. 
+	/** Represents a Commercial Vehicle Restriction.
 	 * @member {string} StateRouteID
 	 * @member {string} State
 	 * @member {int} RestrictionWidthInInches
@@ -266,35 +266,35 @@
 	CVRestrictionData.RESTRICTION_TYPE_BRIDGE_RESTRICTION = "BridgeRestriction";
 	CVRestrictionData.RESTRICTION_TYPE_ROAD_RESTRICTION = "RoadRestriction";
 
-	/** A Highway Alert 
+	/** A Highway Alert
 	 * @constructor
 	 */
 	function Alert(json) {
-		/** @member {int} AlertID Unique Identifier for the alert */ 
+		/** @member {int} AlertID Unique Identifier for the alert */
 		this.AlertID = json ? json.AlertID : null;
-		/** @member {string} County County where alert is located */ 
+		/** @member {string} County County where alert is located */
 		this.County = json ? json.County || null : null;
-		/** @member {DateTime} StartTime When the impact on traffic began */ 
+		/** @member {DateTime} StartTime When the impact on traffic began */
 		this.StartTime = json ? parseDate(json.StartTime) : null;
-		/** @member {DateTime} EndTime Estimated end time for alert */ 
+		/** @member {DateTime} EndTime Estimated end time for alert */
 		this.EndTime = json ? parseDate(json.EndTime) : null;
-		/** @member {string} EventCategory Categorization of alert, i.e. Collision, maintenance, etc.*/ 
+		/** @member {string} EventCategory Categorization of alert, i.e. Collision, maintenance, etc.*/
 		this.EventCategory = json ? json.EventCategory || null : null;
-		/** @member {string} EventStatus Current status of alert, open, closed*/ 
+		/** @member {string} EventStatus Current status of alert, open, closed*/
 		this.EventStatus = json ? json.EventStatus || null : null;
-		/** @member {string} ExtendedDescription Optional - Additional information about the alert, used for relaying useful extra information for an alert*/ 
+		/** @member {string} ExtendedDescription Optional - Additional information about the alert, used for relaying useful extra information for an alert*/
 		this.ExtendedDescription = json ? json.ExtendedDescription || null : null;
-		/** @member {string} HeadlineDescription Information about what the alert has been issued for*/ 
+		/** @member {string} HeadlineDescription Information about what the alert has been issued for*/
 		this.HeadlineDescription = json ? json.HeadlineDescription || null : null;
-		/** @member {DateTime} LastUpdatedTime When was alert was last changed*/ 
+		/** @member {DateTime} LastUpdatedTime When was alert was last changed*/
 		this.LastUpdatedTime = json ? parseDate(json.LastUpdatedTime) : null;
-		/** @member {string} Priority Expected impact on traffic, highest, high, medium, low*/ 
+		/** @member {string} Priority Expected impact on traffic, highest, high, medium, low*/
 		this.Priority = json ? json.Priority || null : null;
-		/** @member {string} Region WSDOT Region which entered the alert*/ 
+		/** @member {string} Region WSDOT Region which entered the alert*/
 		this.Region = json ? json.Region || null : null;
-		/** @member {RoadwayLocation} StartRoadwayLocation Start location for the alert on the roadway*/ 
+		/** @member {RoadwayLocation} StartRoadwayLocation Start location for the alert on the roadway*/
 		this.StartRoadwayLocation = json ? RoadwayLocation.toRoadwayLocation(json.StartRoadwayLocation) : null;
-		/** @member {RoadwayLocation} EndRoadwayLocation End location for the alert on the roadway */ 
+		/** @member {RoadwayLocation} EndRoadwayLocation End location for the alert on the roadway */
 		this.EndRoadwayLocation = json ? RoadwayLocation.toRoadwayLocation(json.EndRoadwayLocation) : null;
 	}
 
@@ -380,7 +380,7 @@
 			: "NoData";
 	}
 
-	/** A data structure that represents a Flow Station 
+	/** A data structure that represents a Flow Station
 	 * @constructor
 	 */
 	function FlowData(json) {
@@ -477,7 +477,10 @@
 			} else if (obj instanceof Array) {
 				output = toFeatureCollection(obj);
 			} else if (obj instanceof BorderCrossingData) {
-				output = new Feature(obj.BorderCrossingLocation.toGeoJsonPoint(), obj);
+			    if (!obj.BorderCrossingLocation) {
+			        console.warn("Missing BorderCrossingLocation info", obj);
+			    }
+				output = new Feature(obj.BorderCrossingLocation ? obj.BorderCrossingLocation.toGeoJsonPoint() : null, obj);
 			} else if (obj instanceof CVRestrictionData || obj instanceof PassCondition) {
 				output = new Feature(new Geometry("Point", [obj.Longitude, obj.Latitude]), obj);
 			} else if (obj instanceof Camera) {

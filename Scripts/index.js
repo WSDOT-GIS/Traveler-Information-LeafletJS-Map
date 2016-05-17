@@ -19,8 +19,8 @@
 requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
-		leaflet: "../bower_components/leaflet/dist/leaflet",//"//cdn.leafletjs.com/leaflet-0.7.2/leaflet",
-		markercluster: "../bower_components/leaflet.markercluster/dist/leaflet.markercluster" // "//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster"
+		leaflet: "../bower_components/leaflet/dist/leaflet",
+		markercluster: "../bower_components/leaflet.markercluster/dist/leaflet.markercluster"
 	},
 	// This shim property makes sure that leaflet is loaded before markercluster.
 	shim: {
@@ -108,7 +108,7 @@ if (!window.Worker) {
 
 		function setupCameraWorker() {
 			var layer, worker, cameraIcon;
-			worker = new Worker("Scripts/tasks/traffic_task.min.js");
+			worker = new Worker("Scripts/tasks/traffic_task.js");
 
 			/** Creates the popup content for a camera feature.
 			 * @returns Element
@@ -300,12 +300,12 @@ if (!window.Worker) {
 		 * @param {string} apiType - Indicates which API endpoint will be queried.
 		 * @param {number} ticks - The refresh rate in milliseconds.
 		 * @param {Object} [layerOptions] - options to be passed to the L.GeoJson constructor.
-		 * @param {string} [taskUrl="Scripts/tasks/traffic_task.min.js"] - The location of the task JavaScript file.
+		 * @param {string} [taskUrl="Scripts/tasks/traffic_task.js"] - The location of the task JavaScript file.
 		 * @returns {Worker}
 		 */
 		function createWorker(layerName, apiType, ticks, layerOptions, taskUrl) {
 			var layer, worker, defaultLayerOptions;
-			worker = new Worker(taskUrl || "Scripts/tasks/traffic_task.min.js");
+			worker = new Worker(taskUrl || "Scripts/tasks/traffic_task.js");
 
 			defaultLayerOptions = {
 				pointToLayer: performDefaultMarkerCreation,

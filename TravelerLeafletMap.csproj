@@ -57,6 +57,7 @@
     <Content Include="bower_components\leaflet\dist\leaflet-src.js" />
     <Content Include="bower_components\leaflet\dist\leaflet.css" />
     <Content Include="bower_components\leaflet\dist\leaflet.js" />
+    <Content Include="bower_components\requirejs\require.js" />
     <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert1.png" />
     <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert1.svg" />
     <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert2.png" />
@@ -116,16 +117,7 @@
     <Content Include="index.html" />
     <Content Include="LICENSE" />
     <Content Include="Scripts\alertUtils.js" />
-    <Content Include="Scripts\index.min.js">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\tasks\traffic_task.js" />
-    <Content Include="Scripts\tasks\task_common.min.js">
-      <DependentUpon>task_common.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\traffic_task.min.js">
-      <DependentUpon>traffic_task.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\index.js" />
   </ItemGroup>
   <ItemGroup>
@@ -165,29 +157,12 @@
   <ItemGroup>
     <Content Include="Scripts\tasks\task_common.js" />
     <Content Include="Scripts\WsdotTraffic.js" />
-    <Content Include="Scripts\WsdotTraffic.min.js.map">
-      <DependentUpon>WsdotTraffic.min.js</DependentUpon>
-    </Content>
     <Content Include="packages.config" />
+    <Content Include="bower.json" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Scripts\WsdotTraffic.min.js">
-      <DependentUpon>WsdotTraffic.js</DependentUpon>
-    </Content>
     <Content Include="Styles\index.css" />
-    <Content Include="Styles\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Web.config" />
     <Content Include="README.md" />
-    <Content Include="Scripts\index.min.js.map">
-      <DependentUpon>index.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\task_common.min.js.map">
-      <DependentUpon>task_common.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\tasks\traffic_task.min.js.map">
-      <DependentUpon>traffic_task.min.js</DependentUpon>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
