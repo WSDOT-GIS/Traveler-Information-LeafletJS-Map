@@ -19,8 +19,8 @@
 requirejs.config({
 	baseUrl: "Scripts",
 	paths: {
-		leaflet: "//cdn.leafletjs.com/leaflet-0.7.2/leaflet",
-		markercluster: "//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster"
+		leaflet: "../bower_components/leaflet/dist/leaflet",//"//cdn.leafletjs.com/leaflet-0.7.2/leaflet",
+		markercluster: "../bower_components/leaflet.markercluster/dist/leaflet.markercluster" // "//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster"
 	},
 	// This shim property makes sure that leaflet is loaded before markercluster.
 	shim: {
@@ -144,7 +144,7 @@ if (!window.Worker) {
 			}
 
 			/**
-			 * 
+			 *
 			 * @typedef {Object.<string, (string|?number)>} CameraProperties
 			 * @property {string} ImageURL
 			 * @property {?number} ImageWidth
@@ -214,7 +214,7 @@ if (!window.Worker) {
 
 			// Create the camera that will be used for the markers.
 			cameraIcon = L.icon({
-				iconUrl: "images/icons/camera.png",
+				iconUrl: "bower_components/wsdot-traveler-info-icons/camera.png",
 				iconSize: [30, 22]
 			});
 

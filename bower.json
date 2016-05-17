@@ -1,0 +1,30 @@
+{
+  "name": "Traveler-Information-LeafletJS-Map",
+  "homepage": "https://github.com/WSDOT-GIS/Traveler-Information-LeafletJS-Map",
+  "authors": [
+    "WSDOT-GIS"
+  ],
+  "description": "WSDOT Traveler info on a Leaflet map",
+  "main": "index.html",
+  "keywords": [
+    "leaflet",
+    "wsdot",
+    "traffic",
+    "traveler",
+    "api"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "wsdot-traveler-info-icons": "https://github.com/WSDOT-GIS/WSDOT-Traveler-Info-Icons.git#^1.0.0",
+    "leaflet": "^0.7.7",
+    "leaflet.markercluster": "^0.5.0"
+  }
+}

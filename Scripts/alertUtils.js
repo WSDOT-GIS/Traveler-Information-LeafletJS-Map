@@ -109,8 +109,8 @@ define(["leaflet"], function (L) {
 
 	SignIcon = L.Icon.extend({
 		options: {
-			iconUrl: "images/icons/alert/RoadClosure.png",
-			shadowUrl: "images/icons/alert/shadow.png",
+			iconUrl: "bower_components/wsdot-traveler-info-icons/alert/RoadClosure.png",
+			shadowUrl: "bower_components/wsdot-traveler-info-icons/alert/shadow.png",
 			iconSize: [25, 25],
 			iconAnchor: [13, 25],
 			shadowAnchor: [0, 5],
@@ -124,7 +124,7 @@ define(["leaflet"], function (L) {
 			throw new TypeError("url is undefined.");
 		}
 		if (!folder) {
-			folder = "images/icons/alert/";
+			folder = "bower_components/wsdot-traveler-info-icons/alert/";
 		}
 		shadowUrl = folder + "shadow.png";
 		return new SignIcon({
@@ -135,7 +135,7 @@ define(["leaflet"], function (L) {
 
 	function createClosureIcon() {
 		return L.icon({
-			iconUrl: "images/icons/alert/RoadClosure.png",
+			iconUrl: "bower_components/wsdot-traveler-info-icons/alert/RoadClosure.png",
 			////iconAnchor: [13, 25],
 			iconSize: [25, 25]
 		});

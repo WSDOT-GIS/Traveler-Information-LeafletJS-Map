@@ -1,3 +1,5 @@
+bower_components
+.vs
 packages
 Thumbs.db
 *.obj

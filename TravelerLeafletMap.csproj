@@ -45,25 +45,74 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="bower_components\leaflet.markercluster\dist\leaflet.markercluster-src.js" />
+    <Content Include="bower_components\leaflet.markercluster\dist\leaflet.markercluster.js" />
+    <Content Include="bower_components\leaflet.markercluster\dist\MarkerCluster.css" />
+    <Content Include="bower_components\leaflet.markercluster\dist\MarkerCluster.Default.css" />
+    <Content Include="bower_components\leaflet\dist\images\layers-2x.png" />
+    <Content Include="bower_components\leaflet\dist\images\layers.png" />
+    <Content Include="bower_components\leaflet\dist\images\marker-icon-2x.png" />
+    <Content Include="bower_components\leaflet\dist\images\marker-icon.png" />
+    <Content Include="bower_components\leaflet\dist\images\marker-shadow.png" />
+    <Content Include="bower_components\leaflet\dist\leaflet-src.js" />
+    <Content Include="bower_components\leaflet\dist\leaflet.css" />
+    <Content Include="bower_components\leaflet\dist\leaflet.js" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert1.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert1.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert2.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert2.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert3.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert3.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert4.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert4.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert5.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\AccidentAlert5.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction1.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction1.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction2.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction2.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction3.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction3.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction4.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Alt\Construction4.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction1.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction1.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction2.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction2.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction3.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction3.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction4.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction4.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction5.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Construction5.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger1.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger1.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger2.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger2.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger3.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger3.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger4.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger4.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger5.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Flagger5.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\RoadClosure.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\RoadClosure.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\shadow.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\shadow.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather1.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather1.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather2.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather2.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather3.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather3.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather4.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather4.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather5.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\alert\Weather5.svg" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\camera.png" />
+    <Content Include="bower_components\wsdot-traveler-info-icons\camera.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\icons\alert\AccidentAlert1.png" />
-    <Content Include="images\icons\alert\AccidentAlert2.png" />
-    <Content Include="images\icons\alert\AccidentAlert3.png" />
-    <Content Include="images\icons\alert\AccidentAlert4.png" />
-    <Content Include="images\icons\alert\AccidentAlert5.png" />
-    <Content Include="images\icons\alert\Construction1.png" />
-    <Content Include="images\icons\alert\Construction2.png" />
-    <Content Include="images\icons\alert\Construction3.png" />
-    <Content Include="images\icons\alert\Construction4.png" />
-    <Content Include="images\icons\alert\Construction5.png" />
-    <Content Include="images\icons\alert\RoadClosure.png" />
-    <Content Include="images\icons\alert\shadow.png" />
-    <Content Include="images\icons\alert\Weather1.png" />
-    <Content Include="images\icons\alert\Weather2.png" />
-    <Content Include="images\icons\alert\Weather3.png" />
-    <Content Include="images\icons\alert\Weather4.png" />
-    <Content Include="images\icons\alert\Weather5.png" />
-    <Content Include="images\icons\camera.png" />
     <Content Include="index.html" />
     <Content Include="LICENSE" />
     <Content Include="Scripts\alertUtils.js" />
@@ -79,7 +128,9 @@
     </Content>
     <Content Include="Scripts\index.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -128,7 +179,6 @@
     </Content>
     <Content Include="Web.config" />
     <Content Include="README.md" />
-    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Scripts\index.min.js.map">
       <DependentUpon>index.min.js</DependentUpon>
     </Content>
