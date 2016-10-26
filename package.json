@@ -1,0 +1,27 @@
+{
+  "name": "wsdot-traveler-info-leaflet-map",
+  "version": "1.0.0",
+  "description": "Map displaying information from WSDOT Traveler API",
+  "main": "index.html",
+  "scripts": {
+    "force-bower": "bower install --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WSDOT-GIS/Traveler-Information-LeafletJS-Map.git"
+  },
+  "keywords": [
+    "wsdot",
+    "traveler",
+    "traffic",
+    "cameras",
+    "alerts"
+  ],
+  "author": "WSDOT",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/WSDOT-GIS/Traveler-Information-LeafletJS-Map/issues"
+  },
+  "homepage": "https://github.com/WSDOT-GIS/Traveler-Information-LeafletJS-Map#readme",
+  "-vs-binding": { "ProjectOpened": [ "force-bower" ] }
+}

@@ -48,23 +48,17 @@ if (!window.Worker) {
 			maxZoom: 18
 		});
 
-		mapQuestOsmLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
-			subdomains: ["otile1", "otile2", "otile3", "otile4"],
-			attribution: mqAttrib,
-			maxZoom: 18
-		});
+		//mapQuestOsmLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
+		//	subdomains: ["otile1", "otile2", "otile3", "otile4"],
+		//	attribution: mqAttrib,
+		//	maxZoom: 18
+		//});
 
-		mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
-			subdomains: ["otile1", "otile2", "otile3", "otile4"],
-			attribution: mqAttrib,
-			maxZoom: 18
-		});
-
-		mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
-			subdomains: ["otile1", "otile2", "otile3", "otile4"],
-			attribution: mqAttrib,
-			maxZoom: 18
-		});
+		//mapQuestOALayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
+		//	subdomains: ["otile1", "otile2", "otile3", "otile4"],
+		//	attribution: mqAttrib,
+		//	maxZoom: 18
+		//});
 
 		openCycleMapLayer = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', {
 			attribution: ocmAttrib,
@@ -96,8 +90,8 @@ if (!window.Worker) {
 		// Create the layer list control and add it to the map.
 		layerList = L.control.layers({
 			OpenStreetMap: osmLayer,
-			"MapQuest OSM": mapQuestOsmLayer,
-			"MapQest Open Aerial": mapQuestOALayer,
+			//"MapQuest OSM": mapQuestOsmLayer,
+			//"MapQest Open Aerial": mapQuestOALayer,
 			"OpenCycleMap": openCycleMapLayer,
 			"OpenCycleMap Transport": ocmTransportLayer,
 			"OpenCycleMap Landscape": ocmLandscapeLayer,
