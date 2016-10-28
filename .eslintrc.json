@@ -3,6 +3,10 @@
     "browser": true,
     "amd": true
   },
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
   "extends": "standard",
   "installedESLint": true,
   "plugins": [
