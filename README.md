@@ -5,9 +5,10 @@ Displays information from the [WSDOT Traveler Information API] on a [LeafletJS] 
 
 ## Requirements ##
 
-* A web server running ASP.NET 4.5. (Other versions of .NET may work, but haven't been tested.)
+* A web server running ASP.NET 4.6.1. (Other versions of .NET may work, but haven't been tested.)
 * Visual Studio 2015
-* Git client
+* [Git client]
+* NPM
 * Bower
  
 If you want to use a different environment, you may need to write your own version of `proxy.ashx`.
@@ -26,7 +27,7 @@ If you want to use a different environment, you may need to write your own versi
 * [LeafletJS]
 * [Leaflet.markercluster]
 
-[Set up Git]:https://help.github.com/articles/set-up-git
+[Git client]:https://help.github.com/articles/set-up-git
 [WSDOT Traveler Information API]:http://www.wsdot.wa.gov/Traffic/api/
 [LeafletJS]:http://leafletjs.com
 [Leaflet.markercluster]:https://github.com/Leaflet/Leaflet.markercluster
