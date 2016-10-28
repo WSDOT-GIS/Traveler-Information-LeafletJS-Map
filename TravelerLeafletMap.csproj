@@ -164,6 +164,7 @@
     <Content Include="Styles\index.css" />
     <Content Include="Web.config" />
     <Content Include="README.md" />
+    <Content Include=".travis.yml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
