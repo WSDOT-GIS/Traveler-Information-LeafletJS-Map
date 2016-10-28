@@ -1,6 +1,4 @@
-﻿/*global Worker, require, requirejs*/
-/*jslint browser:true, regexp:true, white:true*/
-
+/* globals requirejs */
 /**
  * @external LeafletEvent
  * @see {@link http://leafletjs.com/reference.html#event-objects}
@@ -17,379 +15,376 @@
  */
 
 requirejs.config({
-	baseUrl: "Scripts",
-	paths: {
-		leaflet: "../bower_components/leaflet/dist/leaflet",
-		markercluster: "../bower_components/leaflet.markercluster/dist/leaflet.markercluster"
-	},
-	// This shim property makes sure that leaflet is loaded before markercluster.
-	shim: {
-		'markercluster': ['leaflet']
-	}
-});
+  baseUrl: 'Scripts',
+  paths: {
+    leaflet: '../bower_components/leaflet/dist/leaflet',
+    markercluster: '../bower_components/leaflet.markercluster/dist/leaflet.markercluster'
+  },
+  // This shim property makes sure that leaflet is loaded before markercluster.
+  shim: {
+    'markercluster': ['leaflet']
+  }
+})
 
 // Check to make sure the browser supports WebWorkers. If it doesn't, inform the user that they need to upgrade.
 if (!window.Worker) {
-	document.body.innerHTML = "<p>This page uses <a href='http://caniuse.com/#feat=webworkers'>WebWorkers</a>, which your browser does not appear to support. Please upgrade to <a href='http://caniuse.com/#feat=webworkers'>one that does</a>.</p>";
+  document.body.innerHTML = "<p>This page uses <a href='http://caniuse.com/#feat=webworkers'>WebWorkers</a>, which your browser does not appear to support. Please upgrade to <a href='http://caniuse.com/#feat=webworkers'>one that does</a>.</p>"
 } else {
-	require(["leaflet", "alertUtils", "markercluster"], function (L, alertUtils) {
-		"use strict";
-		var map, osmLayer, mapQuestOsmLayer, mapQuestOALayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer,
-			ocmOutdoorsLayer, osmAttrib, mqAttrib, ocmAttrib, layerList, signIcons;
+  require(['leaflet', 'alertUtils', 'markercluster'], function (L, alertUtils) {
+    'use strict'
+    var map, osmLayer, openCycleMapLayer, ocmTransportLayer, ocmLandscapeLayer,
+      ocmOutdoorsLayer, osmAttrib, ocmAttrib, layerList, signIcons
 
-		// Define attribution strings that are common to multiple basemap layers.
-		osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
-		ocmAttrib = osmAttrib + '<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>';
+    // Define attribution strings that are common to multiple basemap layers.
+    osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    ocmAttrib = osmAttrib + '<p>Tiles Courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a></p>'
 
-		// Create the basemap layers.
-		osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: osmAttrib,
-			maxZoom: 18
-		});
+    // Create the basemap layers.
+    osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: osmAttrib,
+      maxZoom: 18
+    })
 
-		openCycleMapLayer = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', {
-			attribution: ocmAttrib,
-			maxZoom: 18
-		});
+    openCycleMapLayer = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', {
+      attribution: ocmAttrib,
+      maxZoom: 18
+    })
 
-		ocmTransportLayer = L.tileLayer('http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png', {
-			attribution: ocmAttrib,
-			maxZoom: 18
-		});
+    ocmTransportLayer = L.tileLayer('http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png', {
+      attribution: ocmAttrib,
+      maxZoom: 18
+    })
 
-		ocmLandscapeLayer = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png', {
-			attribution: ocmAttrib,
-			maxZoom: 18
-		});
+    ocmLandscapeLayer = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png', {
+      attribution: ocmAttrib,
+      maxZoom: 18
+    })
 
-		ocmOutdoorsLayer = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
-			attribution: ocmAttrib,
-			maxZoom: 18
-		});
+    ocmOutdoorsLayer = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
+      attribution: ocmAttrib,
+      maxZoom: 18
+    })
 
-		// Create the map. If geolocation is supported, it will be zoomed to the user's current location.
-		map = L.map('map', {
-			center: [47.41322033015946, -120.80566406246835],
-			zoom: 7,
-			layers: [osmLayer]
-		}).locate({ setView: true, maxZoom: 16 });
+    // Create the map. If geolocation is supported, it will be zoomed to the user's current location.
+    map = L.map('map', {
+      center: [47.41322033015946, -120.80566406246835],
+      zoom: 7,
+      layers: [osmLayer]
+    }).locate({ setView: true, maxZoom: 16 })
 
-		// Create the layer list control and add it to the map.
-		layerList = L.control.layers({
-			OpenStreetMap: osmLayer,
-			"OpenCycleMap": openCycleMapLayer,
-			"OpenCycleMap Transport": ocmTransportLayer,
-			"OpenCycleMap Landscape": ocmLandscapeLayer,
-			"OpenCycleMap Outdoors": ocmOutdoorsLayer
-		}).addTo(map);
+    // Create the layer list control and add it to the map.
+    layerList = L.control.layers({
+      OpenStreetMap: osmLayer,
+      'OpenCycleMap': openCycleMapLayer,
+      'OpenCycleMap Transport': ocmTransportLayer,
+      'OpenCycleMap Landscape': ocmLandscapeLayer,
+      'OpenCycleMap Outdoors': ocmOutdoorsLayer
+    }).addTo(map)
 
-		signIcons = new alertUtils.SignIcons();
+    signIcons = new alertUtils.SignIcons()
 
-		function setupCameraWorker() {
-			var layer, worker, cameraIcon;
-			worker = new Worker("Scripts/tasks/traffic_task.js");
+    function setupCameraWorker () {
+      var layer, worker, cameraIcon
+      worker = new Worker('Scripts/tasks/traffic_task.js')
 
-			/** Creates the popup content for a camera feature.
-			 * @returns Element
-			*/
-			function createCameraPopup(feature) {
-				var output, header, descElement, ownerText, ownerElement;
-				output = document.createElement("div");
-				header = document.createElement("p");
-				header.textContent = feature.properties.Title;
-				output.appendChild(header);
-				if (feature.properties.Description) {
-					descElement = document.createElement("p");
-					descElement.innerText = feature.properties.Description;
-					output.appendChild(descElement);
-				}
-				if (feature.properties.CameraOwner) {
-					ownerText = ["Courtesy of ", feature.properties.CameraOwner].join("");
-					if (feature.properties.OwnerURL) {
-						ownerElement = document.createElement("a");
-						ownerElement.href = feature.properties.OwnerURL;
-					} else {
-						ownerElement = document.createElement("p");
-					}
-					ownerElement.innerText = ownerText;
-					output.appendChild(ownerElement);
-				}
+      /** Creates the popup content for a camera feature.
+       * @returns Element
+      */
+      function createCameraPopup (feature) {
+        var output, header, descElement, ownerText, ownerElement
+        output = document.createElement('div')
+        header = document.createElement('p')
+        header.textContent = feature.properties.Title
+        output.appendChild(header)
+        if (feature.properties.Description) {
+          descElement = document.createElement('p')
+          descElement.innerText = feature.properties.Description
+          output.appendChild(descElement)
+        }
+        if (feature.properties.CameraOwner) {
+          ownerText = ['Courtesy of ', feature.properties.CameraOwner].join('')
+          if (feature.properties.OwnerURL) {
+            ownerElement = document.createElement('a')
+            ownerElement.href = feature.properties.OwnerURL
+          } else {
+            ownerElement = document.createElement('p')
+          }
+          ownerElement.innerText = ownerText
+          output.appendChild(ownerElement)
+        }
 
-				// The img element will not be added until the popup is opened.
-				// This is to avoid loading all camera images at once.
+        // The img element will not be added until the popup is opened.
+        // This is to avoid loading all camera images at once.
 
-				return output;
+        return output
+      }
 
-			}
+      /**
+       *
+       * @typedef {Object.<string, (string|?number)>} CameraProperties
+       * @property {string} ImageURL
+       * @property {?number} ImageWidth
+       * @property {?number} ImageHeight
+       * @property {string} Description
+       * @property {string} Title
+       */
 
-			/**
-			 *
-			 * @typedef {Object.<string, (string|?number)>} CameraProperties
-			 * @property {string} ImageURL
-			 * @property {?number} ImageWidth
-			 * @property {?number} ImageHeight
-			 * @property {string} Description
-			 * @property {string} Title
-			 */
+      /** Adds the camera image element to a camera popup.
+       * @param {LeafletEvent} popupEvent
+       * @param {Popup} popupEvent.popup
+       * @param {HTMLElement} popupEvent.popup._content
+       * @param {string} popupEvent.target
+       * @param {GeoJson} popupEvent.target.feature GeoJSON feature that was clicked.
+       * @param {CameraProperties} popupEvent.target.feature.properties The properties of the feature that was clicked.
+       */
+      function addImgElement (popupEvent) {
+        /* jslint nomen:true */
+        var div, img, props
+        // Get the popup content DOM element.
+        div = popupEvent.popup._content
+        // Get the properties of the clicked feature.
+        props = popupEvent.target.feature.properties
+        // Add the image element if an image URL is defined.
+        if (props.ImageURL && div) {
+          // Create the image element and add it to the popup's DOM element.
+          img = document.createElement('img')
+          img.src = props.ImageURL
+          img.width = props.ImageWidth || null
+          img.height = props.ImageHeight || null
+          img.alt = props.Description || props.Title || 'Camera Image'
+          div.appendChild(img)
+        }
+        /* jslint nomen:false */
+      }
 
-			/** Adds the camera image element to a camera popup.
-			 * @param {LeafletEvent} popupEvent
-			 * @param {Popup} popupEvent.popup
-			 * @param {HTMLElement} popupEvent.popup._content
-			 * @param {string} popupEvent.target
-			 * @param {GeoJson} popupEvent.target.feature GeoJSON feature that was clicked.
-			 * @param {CameraProperties} popupEvent.target.feature.properties The properties of the feature that was clicked.
-			 */
-			function addImgElement(popupEvent) {
-				/*jslint nomen:true*/
-				var div, img, props;
-				// Get the popup content DOM element.
-				div = popupEvent.popup._content;
-				// Get the properties of the clicked feature.
-				props = popupEvent.target.feature.properties;
-				// Add the image element if an image URL is defined.
-				if (props.ImageURL && div) {
-					// Create the image element and add it to the popup's DOM element.
-					img = document.createElement("img");
-					img.src = props.ImageURL;
-					img.width = props.ImageWidth || null;
-					img.height = props.ImageHeight || null;
-					img.alt = props.Description || props.Title || "Camera Image";
-					div.appendChild(img);
-				}
-				/*jslint nomen:false*/
-			}
+      /** Creates a marker for a point feature.
+       * @param {Object} feature
+       * @param {Number[]} latLng
+       * @returns {L.Marker}
+       */
+      function pointToLayer (feature, latLng) {
+        return L.marker(latLng, {
+          icon: cameraIcon,
+          title: feature.properties.Title
+        }).addOneTimeEventListener('popupopen', addImgElement)
+      }
 
-			/** Creates a marker for a point feature.
-			 * @param {Object} feature
-			 * @param {Number[]} latLng
-			 * @returns {L.Marker}
-			 */
-			function pointToLayer(feature, latLng) {
-				return L.marker(latLng, {
-					icon: cameraIcon,
-					title: feature.properties.Title
-				}).addOneTimeEventListener("popupopen", addImgElement);
+      /** Adds a popup to the feature.
+       */
+      function onEachFeature (feature, layer) {
+        layer.bindPopup(createCameraPopup(feature))
+      }
 
-			}
+      /** Creates a GeoJSON layer.
+       * @param {Object} geoJson
+       * @returns {L.GeoJson}
+      */
+      function createGeoJsonLayer (geoJson) {
+        return L.geoJson(geoJson, {
+          pointToLayer: pointToLayer,
+          onEachFeature: onEachFeature
+        })
+      }
 
-			/** Adds a popup to the feature.
-			 */
-			function onEachFeature(feature, layer) {
-				layer.bindPopup(createCameraPopup(feature));
+      // Create the camera that will be used for the markers.
+      cameraIcon = L.icon({
+        iconUrl: 'bower_components/wsdot-traveler-info-icons/camera.png',
+        iconSize: [30, 22]
+      })
 
-			}
+      // Add the event listener that occurs each time the worker sends a message to the UI thread.
+      worker.addEventListener('message', function (oEvent) {
+        var geoJson = oEvent.data
 
-			/** Creates a GeoJSON layer.
-			 * @param {Object} geoJson
-			 * @returns {L.GeoJson}
-			*/
-			function createGeoJsonLayer(geoJson) {
-				return L.geoJson(geoJson, {
-					pointToLayer: pointToLayer,
-					onEachFeature: onEachFeature
-				});
-			}
+        if (geoJson) {
+          if (!layer) {
+            layer = new L.MarkerClusterGroup()
+            layer.addLayer(createGeoJsonLayer(geoJson))
+            // Add this layer to the layer list.
+            layerList.addOverlay(layer, 'Cameras')
+          } else {
+            layer.clearLayers()
+            layer.addLayer(createGeoJsonLayer(geoJson))
+          }
+        }
+      }, false)
 
-			// Create the camera that will be used for the markers.
-			cameraIcon = L.icon({
-				iconUrl: "bower_components/wsdot-traveler-info-icons/camera.png",
-				iconSize: [30, 22]
-			});
+      // Start the worker.  Presently, the content of text passed to the worker here does not matter.
+      worker.postMessage({
+        action: 'start',
+        type: 'HighwayCameras',
+        ticks: 86400000
+      })
 
-			// Add the event listener that occurs each time the worker sends a message to the UI thread.
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
+      return worker
+    }
 
-				if (geoJson) {
-					if (!layer) {
-						layer = new L.MarkerClusterGroup();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-						// Add this layer to the layer list.
-						layerList.addOverlay(layer, "Cameras");
-					} else {
-						layer.clearLayers();
-						layer.addLayer(createGeoJsonLayer(geoJson));
-					}
+    /** Creates generic popup content for a feature
+     * @param {object} feature - A GeoJSON feature.
+     * @returns {HTMLTableElement}
+     */
+    function performDefaultPopupContentCreation (feature) {
+      var table
+      var row
+      var cell
+      var pName
+      var v
+      var nonZeroMeasureRe = /\w+(?:MaxAxle)|(?:In(?:(?:Inches)|(?:Pounds)))/i
 
-				}
-			}, false);
+      if (feature && feature.properties) {
+        table = document.createElement('table')
+        for (pName in feature.properties) {
+          if (feature.properties.hasOwnProperty(pName)) {
+            v = feature.properties[pName]
 
-			// Start the worker.  Presently, the content of text passed to the worker here does not matter.
-			worker.postMessage({
-				action: "start",
-				type: "HighwayCameras",
-				ticks: 86400000
-			});
+            if (v !== null && v !== '' && pName !== 'Longitude' && pName !== 'Latitude' && !(nonZeroMeasureRe.test(pName) && !v)) {
+              row = table.insertRow()
+              cell = document.createElement('th')
+              cell.innerText = pName
+              row.appendChild(cell)
 
-			return worker;
-		}
+              cell = row.insertCell(1)
+              cell.innerText = String(feature.properties[pName])
+            }
+          }
+        }
+      }
 
-		/** Creates generic popup content for a feature
-		 * @param {object} feature - A GeoJSON feature.
-		 * @returns {HTMLTableElement}
-		 */
-		function performDefaultPopupContentCreation(feature) {
-			var table, row, cell, pName, v, nonZeroMeasureRe = /\w+(?:MaxAxle)|(?:In(?:(?:Inches)|(?:Pounds)))/i;
+      return table
+    }
 
-			if (feature && feature.properties) {
-				table = document.createElement("table");
-				for (pName in feature.properties) {
-					if (feature.properties.hasOwnProperty(pName)) {
+    /** Creates a marker for a feature at the specified location.
+     * @param {object} feature - A GeoJSON Feature object.
+     * @param {L.LatLng} latLng
+     * @returns {L.Marker}
+     */
+    function performDefaultMarkerCreation (feature, latLng) {
+      return L.marker(latLng)
+    }
 
-						v = feature.properties[pName];
+    /** Binds a generic popup to a layer.
+     * @param {object} feature - a GeoJSON feature
+     * @param {L.Layer} layer
+     */
+    function performDefaultPerFeatureTasks (feature, layer) {
+      layer.bindPopup(performDefaultPopupContentCreation(feature))
+    }
 
-						if (v !== null && v !== "" && pName !== "Longitude" && pName !== "Latitude" && !(nonZeroMeasureRe.test(pName) && !v)) {
+    /** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
+     * @param {string} layerName - The name that will be given to the layer when it is added to the layer list control.
+     * @param {string} apiType - Indicates which API endpoint will be queried.
+     * @param {number} ticks - The refresh rate in milliseconds.
+     * @param {Object} [layerOptions] - options to be passed to the L.GeoJson constructor.
+     * @param {string} [taskUrl="Scripts/tasks/traffic_task.js"] - The location of the task JavaScript file.
+     * @returns {Worker}
+     */
+    function createWorker (layerName, apiType, ticks, layerOptions, taskUrl) {
+      var layer, worker, defaultLayerOptions
+      worker = new Worker(taskUrl || 'Scripts/tasks/traffic_task.js')
 
-							row = table.insertRow();
-							cell = document.createElement("th");
-							cell.innerText = pName;
-							row.appendChild(cell);
+      defaultLayerOptions = {
+        pointToLayer: performDefaultMarkerCreation,
+        onEachFeature: performDefaultPerFeatureTasks
+      }
 
-							cell = row.insertCell(1);
-							cell.innerText = String(feature.properties[pName]);
-						}
-					}
+      worker.addEventListener('message', function (oEvent) {
+        var geoJson = oEvent.data
 
-				}
-			}
+        if (geoJson) {
+          if (!layer) {
+            layer = L.geoJson(geoJson, layerOptions || defaultLayerOptions)
+            layerList.addOverlay(layer, layerName)
+          } else {
+            layer.clearLayers()
+            layer.addLayer(L.geoJson(geoJson, layerOptions || defaultLayerOptions))
+          }
+        }
+      }, false)
 
-			return table;
-		}
+      worker.addEventListener('error', function (/* {Error} */ e) {
+        if (window.console && window.console.error) {
+          window.console.error('task error', e)
+        }
+      })
 
-		/** Creates a marker for a feature at the specified location.
-		 * @param {object} feature - A GeoJSON Feature object.
-		 * @param {L.LatLng} latLng
-		 * @returns {L.Marker}
-		 */
-		function performDefaultMarkerCreation(feature, latLng) {
-			return L.marker(latLng);
-		}
+      worker.postMessage({
+        action: 'start',
+        type: apiType,
+        ticks: ticks
+      })
 
-		/** Binds a generic popup to a layer.
-		 * @param {object} feature - a GeoJSON feature
-		 * @param {L.Layer} layer
-		 */
-		function performDefaultPerFeatureTasks(feature, layer) {
-			layer.bindPopup(performDefaultPopupContentCreation(feature));
-		}
+      return worker
+    }
 
-		/** Creates a WebWorker that retrieves WSDOT Traveler API info at specified intervals.
-		 * @param {string} layerName - The name that will be given to the layer when it is added to the layer list control.
-		 * @param {string} apiType - Indicates which API endpoint will be queried.
-		 * @param {number} ticks - The refresh rate in milliseconds.
-		 * @param {Object} [layerOptions] - options to be passed to the L.GeoJson constructor.
-		 * @param {string} [taskUrl="Scripts/tasks/traffic_task.js"] - The location of the task JavaScript file.
-		 * @returns {Worker}
-		 */
-		function createWorker(layerName, apiType, ticks, layerOptions, taskUrl) {
-			var layer, worker, defaultLayerOptions;
-			worker = new Worker(taskUrl || "Scripts/tasks/traffic_task.js");
+    // Setup the WebWorkers...
 
-			defaultLayerOptions = {
-				pointToLayer: performDefaultMarkerCreation,
-				onEachFeature: performDefaultPerFeatureTasks
-			};
+    // traffic flow...
 
-			worker.addEventListener("message", function (oEvent) {
-				var geoJson = oEvent.data;
+    function valueToColor (value) {
+      return !value || value === 'Unknown' ? 'white'
+        : value === 1 || value === 'WideOpen' ? '#0f0'
+        : value === 2 || value === 'Moderate' ? 'yellow'
+        : value === 3 || value === 'Heavy' ? 'red'
+        : value === 4 || value === 'StopAndGo' ? 'black'
+        : 'gray'
+    }
 
-				if (geoJson) {
-					if (!layer) {
-						layer = L.geoJson(geoJson, layerOptions || defaultLayerOptions);
-						layerList.addOverlay(layer, layerName);
-					} else {
-						layer.clearLayers();
-						layer.addLayer(L.geoJson(geoJson, layerOptions || defaultLayerOptions));
-					}
+    setupCameraWorker()
 
-				}
-			}, false);
+    // Setup alerts worker.
+    createWorker('Alerts', 'HighwayAlerts', 60000, {
+      pointToLayer: function (feature, latLng) {
+        var icon
+        icon = signIcons.GetIcon(feature)
+        return L.marker(latLng, { icon: icon })
+      },
 
-			worker.addEventListener("error", function (/*{Error}*/ e) {
-				if (window.console && window.console.error) {
-					window.console.error("task error", e);
-				}
-			});
-
-			worker.postMessage({
-				action: "start",
-				type: apiType,
-				ticks: ticks
-			});
-
-			return worker;
-		}
-
-		// Setup the WebWorkers...
-
-		// traffic flow...
-
-		function valueToColor(value) {
-			return !value || value === "Unknown" ? "white"
-				: value === 1 || value === "WideOpen" ? "#0f0"
-				: value === 2 || value === "Moderate" ? "yellow"
-				: value === 3 || value === "Heavy" ? "red"
-				: value === 4 || value === "StopAndGo" ? "black"
-				: "gray";
-		}
-
-		setupCameraWorker();
-
-		// Setup alerts worker.
-		createWorker("Alerts", "HighwayAlerts", 60000, {
-			pointToLayer: function (feature, latLng) {
-				var icon;
-				icon = signIcons.GetIcon(feature);
-				return L.marker(latLng, { icon: icon });
-			},
-
-			onEachFeature: function (feature, layer) {
-				layer.bindPopup(alertUtils.createAlertContent(feature));
-			}
-		});
-		createWorker("Traffic Flow", "TrafficFlow", 60000, {
-			pointToLayer: function(feature, latLng) {
-				return L.circleMarker(latLng, {
-					radius: 5,
-					fillOpacity: 1,
-					color: "black",
-					fillColor: valueToColor(feature.properties.FlowReadingValue)
-				});
-			},
-			onEachFeature: performDefaultPerFeatureTasks
-		});
-		createWorker("Travel Times", "TravelTimes", 60000, {
-			pointToLayer: function (feature, latLng) {
-				var additionalClass = feature.properties.CurrentTime < feature.properties.AverageTime ? "below-average"
-					: feature.properties.CurrentTime > feature.properties.AverageTime ? "above-average"
-					: null;
-				var className = "travel-times-icon";
-				if (additionalClass) {
-					className = [className, additionalClass].join(" ");
-				}
-				return L.marker(latLng, {
-					icon: L.divIcon({
-						className: className,
-						html: "<div>" + String(feature.properties.CurrentTime) + "&rsquo;</div>"
-					})
-				});
-			},
-			onEachFeature: performDefaultPerFeatureTasks
-		});
-		createWorker("Border Crossings", "BorderCrossings", 86400000, {
-			pointToLayer: function (feature, latLng) {
-				var className = "border-crossings-icon";
-				return L.marker(latLng, {
-					icon: L.divIcon({
-						className: className,
-						html: "<div>" + String(feature.properties.WaitTime) + "&rsquo;</div>"
-					})
-				});
-			},
-			onEachFeature: performDefaultPerFeatureTasks
-		});
-		createWorker("CV Restrictions", "CVRestrictions", 86400000);
-		createWorker("Pass Conditions", "MountainPassConditions", 3600000);
-	});
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(alertUtils.createAlertContent(feature))
+      }
+    })
+    createWorker('Traffic Flow', 'TrafficFlow', 60000, {
+      pointToLayer: function (feature, latLng) {
+        return L.circleMarker(latLng, {
+          radius: 5,
+          fillOpacity: 1,
+          color: 'black',
+          fillColor: valueToColor(feature.properties.FlowReadingValue)
+        })
+      },
+      onEachFeature: performDefaultPerFeatureTasks
+    })
+    createWorker('Travel Times', 'TravelTimes', 60000, {
+      pointToLayer: function (feature, latLng) {
+        var additionalClass = feature.properties.CurrentTime < feature.properties.AverageTime ? 'below-average'
+          : feature.properties.CurrentTime > feature.properties.AverageTime ? 'above-average'
+          : null
+        var className = 'travel-times-icon'
+        if (additionalClass) {
+          className = [className, additionalClass].join(' ')
+        }
+        return L.marker(latLng, {
+          icon: L.divIcon({
+            className: className,
+            html: '<div>' + String(feature.properties.CurrentTime) + '&rsquo;</div>'
+          })
+        })
+      },
+      onEachFeature: performDefaultPerFeatureTasks
+    })
+    createWorker('Border Crossings', 'BorderCrossings', 86400000, {
+      pointToLayer: function (feature, latLng) {
+        var className = 'border-crossings-icon'
+        return L.marker(latLng, {
+          icon: L.divIcon({
+            className: className,
+            html: '<div>' + String(feature.properties.WaitTime) + '&rsquo;</div>'
+          })
+        })
+      },
+      onEachFeature: performDefaultPerFeatureTasks
+    })
+    createWorker('CV Restrictions', 'CVRestrictions', 86400000)
+    createWorker('Pass Conditions', 'MountainPassConditions', 3600000)
+  })
 }

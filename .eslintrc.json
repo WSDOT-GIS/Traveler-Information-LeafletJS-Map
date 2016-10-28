@@ -1,0 +1,12 @@
+{
+  "env": {
+    "browser": true,
+    "amd": true
+  },
+  "extends": "standard",
+  "installedESLint": true,
+  "plugins": [
+    "standard",
+    "promise"
+  ]
+}
