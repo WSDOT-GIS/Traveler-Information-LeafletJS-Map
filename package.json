@@ -4,7 +4,7 @@
   "description": "Map displaying information from WSDOT Traveler API",
   "main": "index.html",
   "scripts": {
-    "test": "eslint Scripts/**/*.js",
+    "test": "eslint \"./Scripts/**/*.js\"",
     "force-bower": "bower install --force"
   },
   "repository": {

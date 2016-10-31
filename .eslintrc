@@ -4,8 +4,9 @@
     "amd": true
   },
   "ignore": [
-    "node_modules",
-    "bower_components"
+    "**/node_modules/*",
+    "**/bower_components/*",
+    "**/obj/*"
   ],
   "extends": "standard",
   "installedESLint": true,
