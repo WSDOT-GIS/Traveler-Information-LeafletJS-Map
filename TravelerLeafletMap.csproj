@@ -160,7 +160,7 @@
     <Content Include="packages.config" />
     <Content Include="bower.json" />
     <Content Include="package.json" />
-    <None Include=".eslintrc.json" />
+    <Content Include=".eslintrc" />
     <Content Include="Styles\index.css" />
     <Content Include="Web.config" />
     <Content Include="README.md" />
